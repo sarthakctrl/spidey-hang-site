@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spidey Hang · hang in there</title>
+  <meta name="description" content="Spider-Man hangs upside down from a web at the top of your screen. Drag him and he swings. A free desktop toy for Windows and macOS.">
+  <meta name="theme-color" content="#c8202a">
+  <meta property="og:title" content="Spidey Hang">
+  <meta property="og:description" content="Spider-Man hangs from a web at the top of your screen. Drag him and he swings.">
+  <meta property="og:image" content="og-image.png">
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <script>try{var t=localStorage.getItem('spidey-hang.theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Spidey Hang home">
+      <img src="favicon.png" alt="" width="28" height="28">
+      <span>Spidey Hang</span>
+    </a>
+    <nav class="topnav" aria-label="Sections">
+      <a href="#play">Play</a>
+      <a href="#features">Features</a>
+      <a href="#reminders">Reminders</a>
+      <a href="#hood">Under the hood</a>
+      <a href="#commands">Commands</a>
+    </nav>
+    <div class="topbar-tools">
+      <button class="hang-up" type="button" hidden>Hang him back up</button>
+      <button class="tray" type="button" aria-haspopup="menu" title="Spidey's menu (the app's tray icon)">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#web-icon"/></svg>
+        <span class="visually-hidden">Open Spidey's menu</span>
+      </button>
+      <button class="theme-toggle" type="button" aria-label="Switch theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.2 14.6A8.5 8.5 0 0 1 9.4 3.8a8.5 8.5 0 1 0 10.8 10.8Z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></g></svg>
+      </button>
+      <a class="btn btn-gold btn-small" href="download/">Download</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- 1. Hero ------------------------------------------------------------------------------>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="kicker">A tiny desktop toy for Windows, macOS and Linux</p>
+        <h1 id="hero-title" class="shout">Hang in<br>there.</h1>
+        <p class="lede">Spider-Man hangs from a web at the top of your screen. Drag him and he swings.
+          The one hanging off this page runs the app's own physics, so go on: <strong>grab him.</strong></p>
+        <div class="cta">
+          <a class="btn btn-gold btn-big" data-download-primary href="download/"><span data-os-label>Download Spidey Hang</span></a>
+          <a class="btn btn-paper btn-big" href="#play">Play with him first</a>
+        </div>
+        <div class="os-buttons" role="group" aria-label="Download for your system">
+          <a class="btn btn-paper" data-os-button="mac" href="download/#install-mac"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#os-mac"/></svg>macOS</a>
+          <a class="btn btn-paper" data-os-button="win" href="download/#install-windows"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#os-win"/></svg>Windows</a>
+          <a class="btn btn-paper" data-os-button="linux" href="download/#install-linux"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#os-linux"/></svg>Linux</a>
+        </div>
+        <p class="fineprint">Free and open source (MIT) · Windows, macOS and Linux · <span data-version>version 1.0.0</span></p>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <span class="sfx sfx-boing">BOING!</span>
+        <span class="sfx sfx-swish">SWISH</span>
+        <div class="hero-panel">
+          <p>Clicks go straight through him.</p>
+          <p>He sleeps when he stops.</p>
+          <p>He never steals your keyboard.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Playground ------------------------------------------------------------------------>
+    <section id="play" class="section play" aria-labelledby="play-title">
+      <header class="section-head">
+        <p class="kicker">Playground</p>
+        <h2 id="play-title" class="shout shout-md">Grab him.</h2>
+        <p>Everything you do to the Spidey hanging off this page works the same in the app. The buttons below are the app's menu,
+          laid out flat.</p>
+      </header>
+
+      <ol class="moves">
+        <li><b>Drag</b> him by the body or the rope. Let go to <b>fling</b> him.</li>
+        <li><b>Click</b> him for a nudge.</li>
+        <li><b>Brush</b> the cursor across him to push him.</li>
+        <li>Drag the little <b>web knot</b> at the top to move where he hangs.</li>
+        <li><b>Right-click</b> him (long-press on a phone) for his menu.</li>
+      </ol>
+
+      <div class="panel controls" role="group" aria-label="Spidey's menu, laid out flat">
+        <div class="control-row">
+          <button class="btn btn-red" type="button" data-act="swing">Give him a swing</button>
+          <button class="btn btn-paper" type="button" data-act="reset">Reset</button>
+          <button class="btn btn-paper" type="button" data-act="menu" aria-haspopup="menu">Open the menu…</button>
+        </div>
+        <div class="control-grid">
+          <fieldset class="seg">
+            <legend>Position</legend>
+            <label><input type="radio" name="pos" value="0.12"> Left</label>
+            <label><input type="radio" name="pos" value="0.5"> Center</label>
+            <label><input type="radio" name="pos" value="0.88"> Right</label>
+          </fieldset>
+          <fieldset class="seg">
+            <legend>Size</legend>
+            <label><input type="radio" name="size" value="Small"> Small</label>
+            <label><input type="radio" name="size" value="Medium"> Medium</label>
+            <label><input type="radio" name="size" value="Large"> Large</label>
+          </fieldset>
+          <fieldset class="seg">
+            <legend>Rope length</legend>
+            <label><input type="radio" name="rope" value="Short"> Short</label>
+            <label><input type="radio" name="rope" value="Medium"> Medium</label>
+            <label><input type="radio" name="rope" value="Long"> Long</label>
+          </fieldset>
+          <div class="switches">
+            <label class="switch"><input type="checkbox" data-flag="AutoSwing"> <span>Swing on his own</span></label>
+            <label class="switch"><input type="checkbox" data-flag="Breeze"> <span>Breeze</span></label>
+          </div>
+        </div>
+        <p class="note" data-saved>Your choices are saved in this browser, the way the app saves them in <code>~/.spidey-hang/settings.json</code>.</p>
+      </div>
+    </section>
+
+    <!-- 3. Features -------------------------------------------------------------------------->
+    <section id="features" class="section features" aria-labelledby="features-title">
+      <header class="section-head">
+        <p class="kicker">Everything he does</p>
+        <h2 id="features-title" class="shout shout-md">Small app. Lots of web.</h2>
+      </header>
+
+      <div class="feature-grid">
+        <article class="feature f-red">
+          <h3>A real rope, really swinging</h3>
+          <p>The web is a chain of points with fixed-length links, solved 240 times a second. His ankle is the last point and his head
+            another, so he swings like a double pendulum, and two kinds of grip keep his body in line with the rope.</p>
+          <button class="btn btn-paper btn-small" type="button" data-act="push" data-strength="2.5">Big push</button>
+        </article>
+        <article class="feature">
+          <h3>Drag, fling, nudge, brush</h3>
+          <p>Grab him by the body or anywhere on the rope and throw him. A plain click nudges him away from the click. Sweep the cursor
+            across him without clicking and he gets pushed, like brushing past a hanging charm.</p>
+        </article>
+        <article class="feature f-blue">
+          <h3>Move the web</h3>
+          <p>Drag the knot along the top of the screen and he swings along behind it. Or pick Left, Center or Right from his menu.</p>
+          <div class="mini-row">
+            <button class="btn btn-paper btn-small" type="button" data-pos="0.12">Left</button>
+            <button class="btn btn-paper btn-small" type="button" data-pos="0.5">Center</button>
+            <button class="btn btn-paper btn-small" type="button" data-pos="0.88">Right</button>
+          </div>
+        </article>
+        <article class="feature">
+          <h3>Swing on his own</h3>
+          <p>Keeps a steady swing of about 30 degrees going, pumped like a playground swing. Drop the web too close to an edge and it
+            slides back in just far enough for a full swing.</p>
+          <label class="switch"><input type="checkbox" data-flag="AutoSwing"> <span>Swing on his own</span></label>
+        </article>
+        <article class="feature">
+          <h3>Breeze</h3>
+          <p>A light, uneven breeze that keeps him swaying. Off by default, so he can go still.</p>
+          <label class="switch"><input type="checkbox" data-flag="Breeze"> <span>Breeze</span></label>
+        </article>
+        <article class="feature f-gold">
+          <h3>Clicks go straight through</h3>
+          <p>His window is see-through and only catches the mouse over him, the rope and the knot. Everywhere else, your clicks land on
+            whatever is underneath, and grabbing him never takes keyboard focus from the app you are typing in. This page works the
+            same way: select this text right under his rope.</p>
+        </article>
+        <article class="feature">
+          <h3>Sleeps when still</h3>
+          <p>When he stops moving the app stops drawing, and uses no CPU until you touch him again. While he swings it draws at most 60
+            frames a second, and 30 when he only sways on his own.</p>
+          <p class="live" aria-live="polite">Right now: <b data-live="drawing">asleep</b></p>
+        </article>
+        <article class="feature">
+          <h3>Reminders in a speech bubble</h3>
+          <p>"Time to drink some water" on every half hour, and "It's your lunch time" at 3:00 PM. The bubble pops up just above his
+            face, types itself out, and follows him as he swings.</p>
+          <a class="text-link" href="#reminders">See the reminders</a>
+        </article>
+        <article class="feature">
+          <h3>Heroes and poses</h3>
+          <p>Seven heroes: six pictures and one drawn in code. Pick one from the menu, or have them change every few minutes. Picture heroes switch between a hanging pose and a
+            swinging pose as he speeds up and slows down. The one hanging here is Iron Spider.</p>
+          <a class="text-link" href="#heroes">How heroes work</a>
+        </article>
+        <article class="feature f-blue">
+          <h3>His menu, everywhere</h3>
+          <p>Right-click him, or click the spider-web icon in the menu bar (Windows: by the clock; Ubuntu: the top bar). On Windows a left-click on that icon
+            gives him a swing. The web icon at the top of this page opens the same menu.</p>
+          <button class="btn btn-paper btn-small" type="button" data-act="menu" aria-haspopup="menu">Open it</button>
+        </article>
+        <article class="feature">
+          <h3>A command line</h3>
+          <p>Scripts can talk to a running Spidey: <code>push</code>, <code>reset</code>, <code>swing on</code>, <code>remind</code>,
+            <code>snapshot</code> and more, over a private pipe only your account can open.</p>
+          <a class="text-link" href="#commands">Try the commands</a>
+        </article>
+        <article class="feature">
+          <h3>Light on top of Electron</h3>
+          <p>About 1.3 MB of Spidey's own code and pictures. The builds are trimmed: English only, maximum compression, one
+            architecture per installer, no tests or tools inside. Electron itself is most of the download.</p>
+        </article>
+      </div>
+
+      <aside class="panel desktop-only" aria-labelledby="desktop-only-title">
+        <h3 id="desktop-only-title">Only in the desktop app</h3>
+        <p>A web page can't do these, so this site acts them out or just tells you.</p>
+        <dl>
+          <dt>On top of every app</dt>
+          <dd>The app is a transparent window that stays above everything. Here he only hangs over this page.</dd>
+          <dt>Menu bar or tray icon</dt>
+          <dd>A spider-web icon in the macOS menu bar, the Windows tray or Ubuntu's top bar. The web icon in this page's top bar stands in for it.</dd>
+          <dt>Starts when you sign in</dt>
+          <dd>On by default. Windows: a Run entry for your account. macOS: a login item. Linux: an autostart entry. It waits a few seconds for the taskbar or Dock first.</dd>
+          <dt>Only one Spidey</dt>
+          <dd>Opening the app again while he is up gives him a swing instead of a second Spidey.</dd>
+          <dt>Moves himself to Applications</dt>
+          <dd>On a Mac, opened from the disk image or Downloads, he offers to move to Applications so starting at login keeps working.</dd>
+          <dt>A log file</dt>
+          <dd>Every start, layout and problem goes to <code>~/.spidey-hang/log.txt</code>. Check it first if he misbehaves.</dd>
+        </dl>
+      </aside>
+    </section>
+
+    <!-- 4. Reminders ------------------------------------------------------------------------->
+    <section id="reminders" class="section reminders" aria-labelledby="reminders-title">
+      <header class="section-head">
+        <p class="kicker">Reminders</p>
+        <h2 id="reminders-title" class="shout shout-md">Drink water. Eat lunch.</h2>
+      </header>
+      <div class="split">
+        <div class="panel clock-panel">
+          <p class="clock-now" data-clock>--:--</p>
+          <p class="clock-next" data-next-reminder>Working out the next reminder…</p>
+          <div class="control-row">
+            <button class="btn btn-red" type="button" data-remind="water">Show a test reminder</button>
+            <button class="btn btn-paper" type="button" data-remind="lunch">Lunch one</button>
+          </div>
+          <div class="switches">
+            <label class="switch"><input type="checkbox" data-reminder="WaterReminder"> <span>Drink water every 30 minutes</span></label>
+            <label class="switch"><input type="checkbox" data-reminder="LunchReminder"> <span>Lunch at 3:00 PM</span></label>
+          </div>
+          <p class="note">These are real: leave this page open on the half hour and he will remind you.</p>
+        </div>
+        <ul class="rules">
+          <li><b>On the clock, not on a timer.</b> Water comes at :00 and :30 of every hour. Lunch comes at 3:00 PM, and at 3:00 only lunch shows.</li>
+          <li><b>No stale nagging.</b> If the computer was asleep and a reminder is more than two minutes late, it is skipped.</li>
+          <li><b>Typed, like a message.</b> The bubble pops in, shows typing dots, types out letter by letter, then stays about 9 seconds. Click it to close it.</li>
+          <li><b>Always above his face,</b> in every pose, on the side of the web with more room.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 5. Heroes ---------------------------------------------------------------------------->
+    <section id="heroes" class="section heroes" aria-labelledby="heroes-title">
+      <header class="section-head">
+        <p class="kicker">Heroes</p>
+        <h2 id="heroes-title" class="shout shout-md">Pick your Spidey.</h2>
+        <p>Every hero from the app. Tap one and he takes over the web at the top of this page, the same as
+          <b>Hero</b> in his menu. <b>Hero › Change hero every</b> rotates through them every 2, 5, 10 or 30 minutes.</p>
+      </header>
+      <ul class="hero-gallery" aria-label="Heroes">
+        <li><button class="hero-card" type="button" data-hero="Iron Spider - Web Swing" aria-pressed="false">
+          <img src="/src/assets/heroes/iron-spider-web-swing.webp" alt="" width="496" height="798" loading="lazy">
+          <span class="on-now">Hanging now</span>
+          <b>Iron Spider - Web Swing</b><span>The Iron Spider suit, hanging from his raised fist</span>
+        </button></li>
+        <li><button class="hero-card" type="button" data-hero="Animated Spidey - Web Swing" aria-pressed="false">
+          <img src="/src/assets/heroes/animated-spidey-web-swing.webp" alt="" width="517" height="433" loading="lazy">
+          <span class="on-now">Hanging now</span>
+          <b>Animated Spidey - Web Swing</b><span>Animated style, hanging from one fist, the other hand out in a thwip</span>
+        </button></li>
+        <li><button class="hero-card" type="button" data-hero="Comic Spidey - Web Swing" aria-pressed="false">
+          <img src="/src/assets/heroes/comic-spidey-web-swing.webp" alt="" width="453" height="892" loading="lazy">
+          <span class="on-now">Hanging now</span>
+          <b>Comic Spidey - Web Swing</b><span>Classic comic style, both fists on his web</span>
+        </button></li>
+        <li><button class="hero-card" type="button" data-hero="Iconic Spidey - Upside Down" aria-pressed="false">
+          <img src="/src/assets/heroes/iconic-spidey-upside-down.webp" alt="" width="591" height="734" loading="lazy">
+          <span class="on-now">Hanging now</span>
+          <b>Iconic Spidey - Upside Down</b><span>The classic upside-down hang</span>
+        </button></li>
+        <li><button class="hero-card" type="button" data-hero="Iconic Spidey - Web Swing" aria-pressed="false">
+          <img src="/src/assets/heroes/iconic-spidey-web-swing.webp" alt="" width="691" height="710" loading="lazy">
+          <span class="on-now">Hanging now</span>
+          <b>Iconic Spidey - Web Swing</b><span>Mid-swing, holding the web in his fist</span>
+        </button></li>
+        <li><button class="hero-card" type="button" data-hero="Iconic Spidey - Both" aria-pressed="false">
+          <img src="/src/assets/heroes/iconic-spidey-upside-down.webp" alt="" width="591" height="734" loading="lazy">
+          <span class="on-now">Hanging now</span>
+          <b>Iconic Spidey - Both</b><span>Upside down at rest, the swing pose while he moves</span>
+        </button></li>
+        <li><button class="hero-card" type="button" data-hero="Drawn Spider-Man" aria-pressed="false">
+          <canvas width="300" height="340" data-drawn-preview aria-hidden="true"></canvas>
+          <span class="on-now">Hanging now</span>
+          <b>Drawn Spider-Man</b><span>Drawn entirely in code from simple shapes</span>
+        </button></li>
+      </ul>
+    </section>
+
+    <!-- 6. Under the hood -------------------------------------------------------------------->
+    <section id="hood" class="section hood" aria-labelledby="hood-title">
+      <header class="section-head">
+        <p class="kicker">Under the hood</p>
+        <h2 id="hood-title" class="shout shout-md">See the skeleton.</h2>
+        <p>Switch on the skeleton and swing him: gold dots are the rope's points, blue ones are the web's anchor, his ankle and his head.</p>
+      </header>
+      <div class="split">
+        <div class="panel panel-dark readout" aria-live="off">
+          <label class="switch switch-dark"><input type="checkbox" data-skeleton> <span>Show the skeleton</span></label>
+          <dl class="meters">
+            <div><dt>Rope angle</dt><dd data-meter="ropeAngle">0°</dd></div>
+            <div><dt>Body off the rope</dt><dd data-meter="bodyLean">0°</dd></div>
+            <div><dt>Rope stretch</dt><dd data-meter="stretch">1.000</dd></div>
+            <div><dt>Frames a second</dt><dd data-meter="fps">0</dd></div>
+            <div><dt>Pose</dt><dd data-meter="pose">hang</dd></div>
+            <div><dt>Drawing</dt><dd data-meter="drawing">asleep</dd></div>
+          </dl>
+          <button class="btn btn-gold btn-small" type="button" data-act="push" data-strength="1.5">Swing him</button>
+        </div>
+        <ul class="rules rules-dark">
+          <li><b>Verlet rope, 240 steps a second.</b> Speed is just where a point is minus where it was. Links are pulled back to length 64 times every step.</li>
+          <li><b>Double pendulum.</b> A fixed link from ankle to head, so his body swings on the end of the swinging rope.</li>
+          <li><b>Two kinds of grip.</b> One damps his body turning faster than the rope's end, the other pulls him back into line. Without them the rope whips like a heavy chain.</li>
+          <li><b>Settles in about two seconds.</b> Below a slow speed, friction gets much stronger, so the last few pixels of swing don't take a minute to die out.</li>
+          <li><b>Silk, drawn in layers.</b> A soft shadow, thin strokes side by side for rounded shading, twist marks on top, and a splat of strands at the top of the screen.</li>
+          <li><b>Reads pixels only when it must.</b> Checking whether the pointer is on him reads the canvas back, so that only happens when the pointer is within reach.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 7. Commands -------------------------------------------------------------------------->
+    <section id="commands" class="section commands" aria-labelledby="commands-title">
+      <header class="section-head">
+        <p class="kicker">For scripts</p>
+        <h2 id="commands-title" class="shout shout-md">Talk to him.</h2>
+        <p>A running Spidey takes one-line commands. This terminal sends them to the Spidey on this page.</p>
+      </header>
+      <div class="split split-wide">
+        <div class="terminal" role="region" aria-label="Spidey command terminal">
+          <div class="terminal-bar" aria-hidden="true"><i></i><i></i><i></i><span>spidey.sock</span></div>
+          <div class="terminal-out" aria-live="polite" data-term-out></div>
+          <form class="terminal-in" data-term-form>
+            <label for="term-input" class="prompt">spidey&gt;</label>
+            <input id="term-input" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="push 2" data-term-input>
+          </form>
+          <div class="chips" aria-label="Example commands">
+            <button type="button" data-cmd="push 2">push 2</button>
+            <button type="button" data-cmd="swing toggle">swing toggle</button>
+            <button type="button" data-cmd="remind Hang in there!">remind Hang in there!</button>
+            <button type="button" data-cmd="snapshot spidey.png">snapshot spidey.png</button>
+            <button type="button" data-cmd="stats">stats</button>
+            <button type="button" data-cmd="reset">reset</button>
+            <button type="button" data-cmd="exit">exit</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Where the real commands go</h3>
+          <dl class="keys">
+            <dt>Windows</dt><dd>The named pipe <code>\\.\pipe\SpideyHang</code></dd>
+            <dt>macOS</dt><dd>The socket <code>~/.spidey-hang/spidey.sock</code>, which only your account can open</dd>
+          </dl>
+          <p>The app itself also takes <code>--push [n]</code>, <code>--reset</code> and <code>--exit</code> on its command line.</p>
+          <p><code>snapshot</code> saves only what Spidey himself draws, never the screen behind him.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Download -------------------------------------------------------------------------->
+    <section id="download" class="section download" aria-labelledby="download-title">
+      <header class="section-head">
+        <p class="kicker">Get him</p>
+        <h2 id="download-title" class="shout shout-md">Put him on your desktop.</h2>
+      </header>
+      <div class="downloads" data-downloads>
+        <p class="note">Looking up the latest version…</p>
+      </div>
+      <p><a class="text-link" href="download/">Install steps, troubleshooting and building from source</a></p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div>
+      <p><b>Spidey Hang</b> is a free fan project, MIT licensed. Inspired by the idea of
+        <a href="https://github.com/SharanCreatedThis/Hangly-Windows">Hangly for Windows</a>; no code or artwork was copied.</p>
+      <p>Spider-Man is a Marvel character. This is an unofficial fan project for personal fun. It is not affiliated with or endorsed
+        by Marvel or Disney. The MIT licence covers the code, not the character or the hero pictures.</p>
+    </div>
+    <ul class="footer-links">
+      <li><a data-repo-link="app" href="https://github.com/">The app on GitHub</a></li>
+      <li><a data-repo-link="releases" href="https://github.com/">All releases</a></li>
+      <li><a data-repo-link="site" href="https://github.com/">This site's code</a></li>
+    </ul>
+  </footer>
+
+  <noscript><p class="noscript">Spidey needs JavaScript to hang here, but everything on this page still reads fine, and the
+    <a href="download/">download page</a> works without it.</p></noscript>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="os-mac" viewBox="0 0 24 24"><path fill="currentColor" d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.5-1.7 2.9-.4 7.3 1.2 9.7.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.1-1.2 2.9-2.4.9-1.3 1.3-2.6 1.3-2.7-.1 0-2.4-.9-2.4-4ZM14 5.4c.7-.8 1.1-1.9 1-3-1 0-2.1.6-2.8 1.4-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.5 2.8-1.3Z"/></symbol>
+    <symbol id="os-win" viewBox="0 0 24 24"><path fill="currentColor" d="M3 5.1 10.4 4v7.2H3V5.1Zm0 13.8 7.4 1.1v-7.1H3v6Zm8.3 1.2L21 21.5V12.9h-9.7v7.2Zm0-16.2v7.3H21V2.5l-9.7 1.4Z"/></symbol>
+    <symbol id="os-linux" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c-2.2 0-3.6 1.8-3.6 4.4 0 1.4.3 2.3-.7 3.8-1.2 1.7-2.6 3.6-2.6 6.2 0 .7.1 1.3.3 1.9-.9.4-1.6 1-1.4 1.8.3 1.1 2.2.9 3.4 1.5 1.1.5 2.2.8 2.9.1.5.2 1.1.3 1.7.3s1.2-.1 1.7-.3c.7.7 1.8.4 2.9-.1 1.2-.6 3.1-.4 3.4-1.5.2-.8-.5-1.4-1.4-1.8.2-.6.3-1.2.3-1.9 0-2.6-1.4-4.5-2.6-6.2-1-1.5-.7-2.4-.7-3.8C15.6 3.8 14.2 2 12 2Zm-1.6 4.2c.5 0 .8.5.8 1.1 0 .3-.1.6-.3.8l-.6-.2c.1-.1.2-.3.2-.6 0-.3-.1-.5-.2-.5s-.3.2-.3.5v.2l-.5-.2v-.1c0-.6.4-1 .9-1Zm3.2 0c.6 0 1 .5 1 1.1l-.6.2v-.2c0-.3-.2-.6-.4-.6-.2 0-.4.3-.4.6 0 .2.1.4.2.5l-.6.2c-.2-.2-.3-.5-.3-.8 0-.6.5-1 1.1-1Zm-1.6 2c.8 0 1.9.5 1.9.9 0 .3-1.2 1.1-1.9 1.1s-1.9-.8-1.9-1.1c0-.4 1.1-.9 1.9-.9Z"/></symbol>
+    <symbol id="web-icon" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+        <path d="M12 2.5v19M2.5 12h19M5.3 5.3l13.4 13.4M18.7 5.3 5.3 18.7"/>
+        <path d="M12 7.2c1.6.6 3.1 1.2 3.9 1.9.7.8 1.3 2.3 1.9 2.9-.6 1.6-1.2 3.1-1.9 3.9-.8.7-2.3 1.3-3.9 1.9-1.6-.6-3.1-1.2-3.9-1.9-.7-.8-1.3-2.3-1.9-3.9.6-1.6 1.2-3.1 1.9-3.9.8-.7 2.3-1.3 3.9-1.9Z"/>
+        <circle cx="12" cy="12" r="2.4"/>
+      </g>
+    </symbol>
+  </svg>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
