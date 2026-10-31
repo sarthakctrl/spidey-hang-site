@@ -255,7 +255,9 @@ main > .hero, .section, .footer { width: 100%; max-width: calc(var(--max) + 2 * 
 .os-buttons .btn { min-height: 44px; padding: 8px 14px; font-size: 0.95rem; }
 .os-buttons svg { flex: none; }
 .install-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: clamp(20px, 3vw, 32px); align-items: start; }
-.install .code { margin: 8px 0 0; }
+/* A command inside a step wraps instead of running out of its card on narrow screens. */
+.install .code { margin: 8px 0 0; max-width: 100%; white-space: pre-wrap; overflow-wrap: anywhere; }
+.install-grid > * { min-width: 0; }
 .fineprint { font-size: 0.9rem; color: var(--text-soft); }
 .hero-art { position: relative; min-height: 320px; }
 .hero-panel {
@@ -516,8 +518,8 @@ main > .hero, .section, .footer { width: 100%; max-width: calc(var(--max) + 2 * 
 /* ---- Download page ------------------------------------------------------------------------- */
 
 .page-hero { padding-top: clamp(40px, 7vw, 72px); }
-.steps { counter-reset: step; list-style: none; padding: 0; margin: 0 0 16px; display: grid; gap: 12px; }
-.steps li { counter-increment: step; position: relative; padding-left: 44px; }
+.steps { counter-reset: step; list-style: none; padding: 0; margin: 0 0 16px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+.steps li { counter-increment: step; position: relative; min-width: 0; padding-left: 44px; }
 .steps li::before { content: counter(step); position: absolute; left: 0; top: -2px; width: 30px; height: 30px; display: grid; place-items: center; font: 400 1.2rem/1 var(--font-shout); color: var(--ink); background: var(--gold); border: 2px solid var(--ink); border-radius: 50%; }
 .install.is-highlighted { outline: 4px solid var(--suit-red); outline-offset: 6px; }
 .install h3 { font: 400 2rem/1 var(--font-shout); letter-spacing: 0.03em; }
