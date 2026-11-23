@@ -1,4 +1,4 @@
-// Copied from Spidey Hang 1.0.0, src/renderer/shared/rig.js, by scripts/sync-app-code.mjs. Do not edit here.
+// Copied from Spidey Hang 1.1.0, src/renderer/shared/rig.js, by scripts/sync-app-code.mjs. Do not edit here.
 // MIT licensed, see LICENSE in this folder.
 const module = undefined;
 const require = undefined;
@@ -45,6 +45,15 @@ const require = undefined;
   const W_ROPE = 10;
   const W_ANKLE = 0.6;
   const W_HEAD = 0.4;
+  // Swinging across the screen (travel.js): much lighter friction, so each swing from web to web
+  // keeps its height instead of dying away like a normal hang.
+  const TRAVEL_DAMPING = 0.9998;
+  // The fastest swings across the screen (on big screens, with a long rope) go a little past
+  // MAX_SPEED. Nothing flings him then, so there is no over-the-top to guard against.
+  const TRAVEL_MAX_SPEED = 2000;
+  // How fast a rope that is longer or shorter than wanted (after re-tying it) eases back, per step.
+  // About a second and a half to close most of the gap: he lowers himself, rather than dropping.
+  const ROPE_EASE = 0.006;
 
   const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x));
 
@@ -82,6 +91,18 @@ const require = undefined;
       this.lastDirection = 0;
       this.touching = false;
       this.random = Math.random;
+      /** While swinging across the screen (travel.js): lighter friction, no settling, no side walls. */
+      this.travelling = false;
+      /** Let go of the web and flying (travel.js): only his body moves, the old rope stays where it was. */
+      this.free = false;
+      /** His body is turned by travel.js (placeBody) rather than by the physics. */
+      this.steered = false;
+      /** A sideways push set by travel.js, like the pump of "swing on his own" (units per second squared). */
+      this.travelPush = 0;
+      /** The rope length he eases back to after the rope was re-tied at another length. 0 = as built. */
+      this.ropeTarget = 0;
+      /** How fast the rope eases to ropeTarget, per step. Faster while he drops in or climbs out. */
+      this.ropeEase = ROPE_EASE;
     }
 
     get ropeAngle() {
@@ -116,6 +137,10 @@ const require = undefined;
       this.bodyLength = bodyLength;
       this.lastPeak = 0;
       this.lastDirection = 0;
+      this.travelling = false;
+      this.free = false;
+      this.steered = false;
+      this.travelPush = 0;
 
       const segments = clamp(Math.round(ropeLength / 16), 8, 28);
       const segLength = ropeLength / segments;
@@ -133,6 +158,92 @@ const require = undefined;
         this.links.push({ a: this.particles[i], b: this.particles[i + 1], length: segLength });
       }
       this.links.push({ a: this.ankle, b: this.head, length: bodyLength });
+      this.ropeTarget = ropeLength;
+    }
+
+    /**
+     * Ties the rope to a new point (window units, at the top) as a web shot from his hand would:
+     * the rope runs straight from there to his hand, as long as that distance, and he keeps his speed.
+     * The rope then eases back to its usual length (ropeTarget).
+     */
+    reattach(anchorX) {
+      const ankle = this.ankle;
+      const head = this.head;
+      const length = Math.max(1, Math.hypot(ankle.x - anchorX, ankle.y - ANCHOR_Y));
+      const segments = clamp(Math.round(length / 16), 8, 28);
+      const vx = ankle.x - ankle.px;
+      const vy = ankle.y - ankle.py;
+      this.particles = [];
+      this.links = [];
+      for (let i = 0; i < segments; i++) {
+        const t = i / segments;
+        const p = new Particle(anchorX + (ankle.x - anchorX) * t, ANCHOR_Y + (ankle.y - ANCHOR_Y) * t, i === 0 ? 0 : W_ROPE);
+        // Each point of the rope moves in proportion to its distance from the new anchor, as a
+        // straight rope turning round it would.
+        p.px = p.x - vx * t;
+        p.py = p.y - vy * t;
+        this.particles.push(p);
+      }
+      this.particles.push(ankle, head);
+      this.anchor = this.particles[0];
+      this.ropeCount = segments + 1;
+      for (let i = 0; i < segments; i++) {
+        this.links.push({ a: this.particles[i], b: this.particles[i + 1], length: length / segments });
+      }
+      this.links.push({ a: ankle, b: head, length: this.bodyLength });
+      this.lastPeak = 0;
+      this.lastDirection = 0;
+      this.free = false;
+    }
+
+    /**
+     * Reels the rope in to `length`, everything hanging still and straight below the web, as he is
+     * when he has just climbed up to it. Set ropeTarget after this and he lowers himself down.
+     */
+    reel(length) {
+      const ropeLinks = this.ropeCount - 1;
+      const seg = Math.max(0.5, length) / ropeLinks;
+      const { x, y } = this.anchor;
+      for (let i = 0; i < this.ropeCount; i++) {
+        const p = this.particles[i];
+        p.x = p.px = x;
+        p.y = p.py = y + i * seg;
+      }
+      for (let i = 0; i < ropeLinks; i++) {
+        this.links[i].length = seg;
+      }
+      this.head.x = this.head.px = x;
+      this.head.y = this.head.py = this.ankle.y + this.bodyLength;
+    }
+
+    /** Lets go of the web. He flies free until reattach(); the rope stays still where it was. */
+    release() {
+      this.free = true;
+      for (let i = 0; i < this.ropeCount - 1; i++) {
+        const p = this.particles[i];
+        p.px = p.x;
+        p.py = p.y;
+      }
+    }
+
+    /**
+     * Sets his body's angle from his hand (as bodyAngle measures it) now and one step ago, so the
+     * physics carries on from it with the right speed. Used while steered.
+     */
+    placeBody(angle, previous) {
+      const { ankle, head, bodyLength } = this;
+      head.x = ankle.x + Math.sin(angle) * bodyLength;
+      head.y = ankle.y + Math.cos(angle) * bodyLength;
+      head.px = ankle.px + Math.sin(previous) * bodyLength;
+      head.py = ankle.py + Math.cos(previous) * bodyLength;
+    }
+
+    /** Moves everything, the anchor too, sideways without adding speed (the window moved). */
+    shiftEverything(dx) {
+      for (const p of this.particles) {
+        p.x += dx;
+        p.px += dx;
+      }
     }
 
     /** A sideways shove. Strength 1 is a clear swing. direction: -1, 1, or 0 for random. */
@@ -162,16 +273,20 @@ const require = undefined;
 
     simulate(time, breeze, autoSwing, dragged, target) {
       const wind = breeze ? BREEZE_STRENGTH * (0.6 * Math.sin(time * 0.8) + 0.4 * Math.sin(time * 1.9 + 1.3)) : 0;
-      const pump = autoSwing && !dragged ? this.pumpAcceleration() : 0;
-      const maxMove = MAX_SPEED * STEP;
+      const pump = this.travelling ? this.travelPush : autoSwing && !dragged ? this.pumpAcceleration() : 0;
+      const maxMove = (this.travelling ? TRAVEL_MAX_SPEED : MAX_SPEED) * STEP;
       const bodySpeed = Math.max(stepDistance(this.ankle), stepDistance(this.head)) / STEP;
       // No settling friction while he swings on his own: it would brake him at every turn.
-      const damping = !dragged && !autoSwing && bodySpeed < SETTLE_SPEED ? SETTLE_DAMPING : DAMPING;
+      // None at all in flight: a plain throw, so travel.js can tell exactly where he will be.
+      const damping = this.free ? 1 : this.travelling ? TRAVEL_DAMPING
+        : !dragged && !autoSwing && bodySpeed < SETTLE_SPEED ? SETTLE_DAMPING : DAMPING;
+      this.easeRope();
 
       const particles = this.particles;
-      for (let i = 0; i < particles.length; i++) {
+      const firstMoving = this.free ? this.ropeCount - 1 : 0;
+      for (let i = firstMoving; i < particles.length; i++) {
         const p = particles[i];
-        if (p.w === 0) {
+        if (p.w === 0 || (this.steered && p === this.head)) {
           continue;
         }
         // The pump turns the whole thing as one long pendulum: each point gets a push in proportion
@@ -192,7 +307,7 @@ const require = undefined;
 
       // The grip only makes sense when he is roughly in line with the rope. Leave it off against a
       // wall or the top (the rope can fold back past his hand) and when he is tangled.
-      if (!this.touching && this.bodyOffRopeEnd() < 1.0) {
+      if (!this.steered && !this.free && !this.touching && this.bodyOffRopeEnd() < 1.0) {
         this.dampGrip();
         this.straightenGrip();
       }
@@ -202,13 +317,41 @@ const require = undefined;
         dragged.y += (target.y - dragged.y) * 0.3;
       }
 
+      // In flight the rope links are left out, and the body link while travel.js turns his body.
       const links = this.links;
+      const firstLink = this.free ? links.length - 1 : 0;
+      const endLink = this.steered ? links.length - 1 : links.length;
       for (let n = 0; n < ITERATIONS; n++) {
-        for (let i = 0; i < links.length; i++) {
+        for (let i = firstLink; i < endLink; i++) {
           solve(links[i]);
         }
       }
       this.contain();
+    }
+
+    /** True while the rope is still easing toward its usual length (ropeTarget): he is not still yet. */
+    get reeling() {
+      if (!this.ropeTarget || this.free || this.ropeCount < 2) {
+        return false;
+      }
+      // Still easing to its length, or slack (folded, not yet pulled straight by his weight).
+      return Math.abs(this.ropeLength - this.ropeTarget) > 0.5 || this.ropeStretch < 0.97;
+    }
+
+    /** Brings a re-tied rope a little nearer its usual length (ropeTarget). */
+    easeRope() {
+      const ropeLinks = this.ropeCount - 1;
+      if (!this.ropeTarget || ropeLinks < 1 || this.free) {
+        return;
+      }
+      const now = this.links[0].length * ropeLinks;
+      if (Math.abs(now - this.ropeTarget) < 0.05) {
+        return;
+      }
+      const next = (now + (this.ropeTarget - now) * this.ropeEase) / ropeLinks;
+      for (let i = 0; i < ropeLinks; i++) {
+        this.links[i].length = next;
+      }
     }
 
     distanceShare(i) {
@@ -328,7 +471,7 @@ const require = undefined;
     }
 
     nearAnchor(pt) {
-      return Math.abs(pt.x - this.anchor.x) < 16 && pt.y < this.anchor.y + 18;
+      return !this.free && Math.abs(pt.x - this.anchor.x) < 16 && pt.y < this.anchor.y + 18;
     }
 
     /** His body: the ankle or head end, whichever is nearer the point. Null if the point is not on him. */
@@ -348,7 +491,7 @@ const require = undefined;
     /** What the user grabbed: an end of the body, or a point on the rope. Null if nothing. */
     pick(pt) {
       const body = this.pickBody(pt);
-      if (body) {
+      if (body || this.free) {
         return body;
       }
       let best = null;
@@ -369,17 +512,22 @@ const require = undefined;
       // past his hand at a wall and fold back, and the grip then flipped him over the top.
       const side = this.bodyLength * 0.42;
       this.touching = false;
-      for (let i = 1; i < this.particles.length; i++) {
+      for (let i = this.free ? this.ropeCount - 1 : 1; i < this.particles.length; i++) {
         const p = this.particles[i];
+        if (this.steered && p === this.head) {
+          continue;
+        }
         const bodyPart = i >= this.ropeCount - 1;
         const floor = this.height - (bodyPart ? this.bodyLength * REACH_PAST_HEAD : 4);
         // The sides soak up sideways speed, like a padded wall. Do NOT make them bounce: pressed
         // against a wall, the rope keeps pulling his body back into it every step, and a bounce
         // turned each pull into fresh speed until he was flung over the top.
-        if (p.x < side) {
+        // No walls while he swings across the screen: the window follows him instead.
+        const walls = !this.travelling;
+        if (walls && p.x < side) {
           p.x = p.px = side;
           this.touching = true;
-        } else if (p.x > this.width - side) {
+        } else if (walls && p.x > this.width - side) {
           p.x = p.px = this.width - side;
           this.touching = true;
         }
@@ -428,7 +576,7 @@ const require = undefined;
     b.y -= dy * kb;
   }
 
-  const api = { Rig, Particle, STEP, REACH_PAST_HEAD, SWING_TARGET };
+  const api = { Rig, Particle, STEP, REACH_PAST_HEAD, SWING_TARGET, ANCHOR_Y, GRAVITY, ROPE_EASE };
   if (typeof module === 'object' && module.exports) {
     module.exports = api;
   } else {

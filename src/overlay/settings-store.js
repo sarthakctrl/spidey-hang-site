@@ -27,7 +27,25 @@ export const DEFAULTS = Object.freeze({
   StartAutomatically: true,
   WaterReminder: true,
   LunchReminder: true,
+  WaterMinutes: 30,
+  LunchTime: '15:00',
+  FocusMinutes: 25,
+  ShortBreakMinutes: 5,
+  LongBreakMinutes: 15,
+  Reactions: true,
+  IdleMinutes: 5,
+  Antics: true,
+  Sounds: false,
+  Hotkeys: true,
+  LastGreeting: '',
 });
+
+export const WATER_CHOICES = [15, 20, 30, 45, 60, 90, 120];
+export const LUNCH_CHOICES = ['11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '15:00'];
+export const IDLE_CHOICES = [2, 5, 10, 15, 30];
+export const FOCUS_CHOICES = [15, 25, 30, 45, 50, 60];
+export const SHORT_BREAK_CHOICES = [3, 5, 10];
+export const LONG_BREAK_CHOICES = [10, 15, 20, 30];
 
 export const BODY_LENGTH = { Small: 110, Medium: 150, Large: 200 };
 export const ROPE_FRACTION = { Short: 0.15, Medium: 0.27, Long: 0.42 };
@@ -53,6 +71,18 @@ export function clean(raw) {
   }
   if (!SITE_HEROES.includes(values.Hero)) {
     values.Hero = DEFAULTS.Hero;
+  }
+  if (!WATER_CHOICES.includes(values.WaterMinutes)) {
+    values.WaterMinutes = DEFAULTS.WaterMinutes;
+  }
+  if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(values.LunchTime)) {
+    values.LunchTime = DEFAULTS.LunchTime;
+  }
+  for (const [key, choices] of [['IdleMinutes', IDLE_CHOICES], ['FocusMinutes', FOCUS_CHOICES],
+    ['ShortBreakMinutes', SHORT_BREAK_CHOICES], ['LongBreakMinutes', LONG_BREAK_CHOICES]]) {
+    if (!choices.includes(values[key])) {
+      values[key] = DEFAULTS[key];
+    }
   }
   values.StartAutomatically = true;
   return values;

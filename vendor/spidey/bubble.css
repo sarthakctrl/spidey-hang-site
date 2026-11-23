@@ -1,4 +1,4 @@
-/* Copied from Spidey Hang 1.0.0, src/renderer/overlay.css. */
+/* Copied from Spidey Hang 1.1.0, src/renderer/overlay.css. */
 /* Reminder speech bubble, iMessage style. Placed by bubble.js at the tip of its tail. */
 .bubble { position: absolute; left: 0; top: 0; max-width: 240px; cursor: pointer; font: 15px/1.35 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif; -webkit-font-smoothing: antialiased; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.28)); will-change: transform; }
 .bubble[hidden] { display: none; }
@@ -18,6 +18,28 @@
 .bubble-dots i:nth-child(3) { animation-delay: 0.3s; margin-right: 0; }
 @keyframes bubble-blink { 50% { opacity: 0; } }
 @keyframes bubble-dot { 0%, 60%, 100% { transform: translateY(0); opacity: 0.45; } 30% { transform: translateY(-4px); opacity: 1; } }
+/* The Big web reminder's text: a silk patch in the middle of the big web (shared/webshot.js). The
+   round element covers the whole web, so a click anywhere on it closes the reminder. */
+.webnote { position: absolute; left: 0; top: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; transition: opacity 0.2s ease-out; }
+.webnote[hidden] { display: none; }
+.webnote.in { opacity: 1; }
+.webnote.out { opacity: 0; transition: opacity 0.35s ease-in; }
+.webnote-patch { box-sizing: border-box; max-width: 56%; padding: 14px 20px 16px; background: #f7f8fa; border: 1.5px solid #101018; border-radius: 18px 14px 20px 13px; box-shadow: 0 3px 12px rgba(8, 10, 16, 0.35); text-align: center; font: 700 20px/1.3 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif; color: #15161a; -webkit-font-smoothing: antialiased; overflow-wrap: break-word; }
+.webnote-label { margin-bottom: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #a3121f; }
+.webnote-text { min-height: 1.3em; }
+.webnote-caret { display: inline-block; width: 2px; height: 1.05em; margin-left: 1px; vertical-align: -0.15em; background: #a3121f; }
+.webnote.typed .webnote-caret { display: none; }
+/* Dozing: z's float up from his face once, then stay put (no endless animation: idle stays at 0% CPU). */
+.zzz { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; font: italic 800 20px/1 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif; color: #f4f6ff; text-shadow: 0 0 2px #1b2140, 0 1px 4px rgba(0, 0, 0, 0.55); }
+.zzz[hidden] { display: none; }
+.zzz span { position: absolute; left: 0; top: 0; opacity: 0; animation: zzz-rise 1.6s ease-out forwards; }
+.zzz span:nth-child(1) { --x: 8px; --y: -12px; font-size: 14px; animation-delay: 0s; }
+.zzz span:nth-child(2) { --x: 24px; --y: -30px; font-size: 18px; animation-delay: 0.9s; }
+.zzz span:nth-child(3) { --x: 44px; --y: -54px; font-size: 24px; animation-delay: 1.8s; }
+.zzz.left span { --flip: -1; }
+@keyframes zzz-rise { from { opacity: 0; transform: translate(0, 0) scale(0.5); } to { opacity: 0.95; transform: translate(calc(var(--x) * var(--flip, 1)), var(--y)) scale(1); } }
 @media (prefers-reduced-motion: reduce) {
+  .zzz span { animation: none; opacity: 0.95; transform: translate(calc(var(--x) * var(--flip, 1)), var(--y)); }
+  .webnote, .webnote.out { transition: none; }
   .bubble-pop, .bubble.out .bubble-pop { transition: opacity 0.2s; transform: none; }
 }

@@ -5,8 +5,9 @@ Spider-Man hangs from a web at the top of your screen. Visitors can play with hi
 about every feature, and download the app for Windows, macOS or Linux.
 
 The Spidey hanging off the page is not a copy: it runs the app's own physics, drawing, picture-hero
-loader and reminder bubble, copied from the app into `vendor/spidey/`. He starts as Iron Spider and
-hangs still until you grab him or switch on "Swing on his own"; every hero from the app can be picked.
+loader, web-swinging, reminder bubble, focus timer and personality, copied from the app into `vendor/spidey/`.
+He starts as Iron Spider and hangs still until you grab him or switch on "Swing on his own"; every hero
+from the app can be picked. Double-click him to web-swing; leave the page alone for 5 minutes and he dozes.
 
 ## Run it
 
@@ -27,8 +28,11 @@ index.html, download/index.html   the two pages (Vite builds both)
 src/
   main.js, download-main.js       page entry points
   overlay/                        the hanging Spidey (a port of the app's hang-view.js), his menu,
-                                  settings (localStorage, the app's keys), picture heroes
-  sections/                       playground, reminders, hero gallery, terminal, download cards
+                                  settings (localStorage, the app's keys), picture heroes, and
+                                  brain.js: focus timer, doze/greet, battery, antics, shortcuts
+                                  (what the app's main process decides)
+  sections/                       playground, new tricks, focus, reminders, hero gallery, terminal,
+                                  download cards
   lib/                            the app's command language, platform detection, release lookup
   theme.js                        light and dark (follows the system until you pick one)
   assets/heroes/                  the app's hero pictures (from its src/heroes)

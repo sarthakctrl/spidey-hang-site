@@ -3,10 +3,16 @@
  * opens so the current choices show. Opens on right-click or a long press on Spidey, from the web
  * icon in the page's menu bar (the app's tray icon), and from the playground's Menu button.
  *
- * The one item the web cannot do (starting at sign-in) is shown but disabled, with a note.
+ * Items the web cannot do (starting at sign-in, your own heroes, other screens, editing reminders)
+ * are shown but disabled, with a note. Shortcuts show on the right, as in the app's menu.
  * Keyboard: arrows move, Right/Enter opens a submenu, Left/Escape goes back, Tab leaves.
  */
-import { DRAWN, SITE_HEROES } from './settings-store.js';
+import { reminders } from '../../vendor/spidey/index.js';
+import {
+  DRAWN, SITE_HEROES, WATER_CHOICES, LUNCH_CHOICES, IDLE_CHOICES, FOCUS_CHOICES, SHORT_BREAK_CHOICES, LONG_BREAK_CHOICES,
+} from './settings-store.js';
+
+const isMac = () => /mac os x|macintosh/i.test(navigator.userAgent);
 
 function startLabel() {
   const ua = navigator.userAgent;
@@ -20,10 +26,12 @@ function startLabel() {
 }
 
 export class SpideyMenu {
-  /** actions: { swing, reset, relayout, setFlags, nextHero, setRotate, toggleReminder, testReminder, takeDown, say } */
-  constructor({ settings, actions }) {
+  /** actions: main.js's actions. brain: the Brain (focus timer state). spidey: the HangingSpidey (shown, once). */
+  constructor({ settings, actions, brain, spidey }) {
     this.settings = settings;
     this.actions = actions;
+    this.brain = brain;
+    this.spidey = spidey;
     this.layer = document.createElement('div');
     this.layer.className = 'menu-layer';
     this.layer.hidden = true;
@@ -54,11 +62,82 @@ export class SpideyMenu {
   template() {
     const s = this.settings;
     const a = this.actions;
+    const brain = this.brain;
+    const spidey = this.spidey;
     const radio = (label, checked, click) => ({ label, type: 'radio', checked, click });
     const relayout = (changes) => () => a.relayout(changes);
     const hero = s.get('Hero');
+    const keys = isMac() ? '⌃⌥⇧' : 'Ctrl+Alt+Shift+';
+    const now = Date.now();
+    const focus = brain.focus;
+    const lengths = (key, values) => values.map((m) => radio(`${m} minutes`, s.get(key) === m, () => a.setFocusLength(key, m)));
+    const water = (m) => (m % 60 === 0 ? (m === 60 ? '1 hour' : `${m / 60} hours`) : `${m} minutes`);
+    const time = (t) => reminders.clockTime(t);
+
+    const focusMenu = {
+      label: focus.running ? `Focus timer (${focus.label(now)})` : 'Focus timer',
+      submenu: [
+        ...(focus.running ? [{ label: focus.describe(now), enabled: false }] : []),
+        focus.running
+          ? { label: 'Stop', accel: `${keys}F`, click: () => a.stopFocus() }
+          : { label: `Start a ${s.get('FocusMinutes')} minute focus`, accel: `${keys}F`, click: () => a.startFocus() },
+        ...(focus.running ? [{ label: focus.phase === 'focus' ? 'Skip to the break' : 'Skip to the next focus', click: () => a.skipFocus() }] : []),
+        { type: 'separator' },
+        { label: 'Focus length', submenu: lengths('FocusMinutes', FOCUS_CHOICES) },
+        { label: 'Short break', submenu: lengths('ShortBreakMinutes', SHORT_BREAK_CHOICES) },
+        { label: 'Long break (every 4th)', submenu: lengths('LongBreakMinutes', LONG_BREAK_CHOICES) },
+      ],
+    };
+    const remindersMenu = {
+      label: 'Reminders',
+      submenu: [
+        { label: `Drink water every ${water(s.get('WaterMinutes'))}`, type: 'checkbox', checked: s.get('WaterReminder'), click: () => a.toggleReminder('WaterReminder') },
+        { label: 'Water every', submenu: WATER_CHOICES.map((m) => radio(water(m), s.get('WaterMinutes') === m, () => a.setReminderTime({ WaterMinutes: m }))) },
+        { label: `Lunch at ${time(s.get('LunchTime'))}`, type: 'checkbox', checked: s.get('LunchReminder'), click: () => a.toggleReminder('LunchReminder') },
+        { label: 'Lunch time', submenu: LUNCH_CHOICES.map((t) => radio(time(t), s.get('LunchTime') === t, () => a.setReminderTime({ LunchTime: t }))) },
+        ...(spidey.once.length ? [{ type: 'separator' }] : []),
+        ...spidey.once.map((o) => ({ label: `${o.text}  (at ${o.at.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}, once)`, enabled: false })),
+        { type: 'separator' },
+        { label: 'Edit your reminders…', enabled: false, note: 'In the desktop app' },
+        { label: 'Show a test reminder', click: () => a.testReminder() },
+      ],
+    };
+    const hotkeyItem = {
+      label: `Keyboard shortcuts (${keys}H hide, S swing, W web-swing, F focus)`,
+      type: 'checkbox',
+      checked: s.get('Hotkeys'),
+      click: () => a.toggleSetting('Hotkeys'),
+    };
+    const startItem = { label: startLabel(), type: 'checkbox', checked: true, enabled: false, note: 'In the desktop app' };
+
+    if (!spidey.shown) {
+      return [
+        spidey.up
+          ? { label: 'Show him', accel: `${keys}H`, click: () => a.show() }
+          : { label: 'Bring him back', click: () => a.show() },
+        { type: 'separator' },
+        focusMenu,
+        remindersMenu,
+        { type: 'separator' },
+        hotkeyItem,
+        startItem,
+      ];
+    }
+
     return [
-      { label: 'Give him a swing', click: () => a.swing() },
+      { label: 'Give him a swing', accel: `${keys}S`, click: () => a.swing() },
+      {
+        label: 'Web-swing to',
+        submenu: [
+          { label: 'Left', click: () => a.webSwing('left') },
+          { label: 'Center', click: () => a.webSwing('center') },
+          { label: 'Right', click: () => a.webSwing('right') },
+          { label: 'Somewhere else', click: () => a.webSwing('random') },
+          { label: 'Where the pointer is', accel: `${keys}W`, click: () => a.webSwing('pointer') },
+          { type: 'separator' },
+          { label: 'Across the screen', click: () => a.webSwing() },
+        ],
+      },
       { label: 'Reset', click: () => a.reset() },
       { type: 'separator' },
       {
@@ -68,6 +147,7 @@ export class SpideyMenu {
       },
       { label: 'Size', submenu: ['Small', 'Medium', 'Large'].map((n) => radio(n, s.get('Size') === n, relayout({ Size: n }))) },
       { label: 'Rope length', submenu: ['Short', 'Medium', 'Long'].map((n) => radio(n, s.get('Rope') === n, relayout({ Rope: n }))) },
+      { label: 'Screen', submenu: [radio('Main screen', true, () => {}), { type: 'separator' }, { label: 'Follow the pointer', enabled: false, note: 'In the desktop app, across all your screens' }] },
       {
         label: 'Hero',
         submenu: [
@@ -81,22 +161,43 @@ export class SpideyMenu {
             submenu: [0, 2, 5, 10, 30].map((m) => radio(m === 0 ? 'Never' : `${m} minutes`, s.get('RotateMinutes') === m, () => a.setRotate(m))),
           },
           { label: 'Next hero', click: () => a.nextHero() },
+          { type: 'separator' },
+          { label: 'Add a hero from a picture…', enabled: false, note: 'In the desktop app' },
         ],
       },
       { label: 'Swing on his own', type: 'checkbox', checked: s.get('AutoSwing'), click: () => a.setFlags({ AutoSwing: !s.get('AutoSwing') }) },
       { label: 'Breeze', type: 'checkbox', checked: s.get('Breeze'), click: () => a.setFlags({ Breeze: !s.get('Breeze') }) },
       {
-        label: 'Reminders',
+        label: 'Personality',
         submenu: [
-          { label: 'Drink water every 30 minutes', type: 'checkbox', checked: s.get('WaterReminder'), click: () => a.toggleReminder('WaterReminder') },
-          { label: 'Lunch at 3:00 PM', type: 'checkbox', checked: s.get('LunchReminder'), click: () => a.toggleReminder('LunchReminder') },
+          { label: 'React to the computer (doze, greet, battery)', type: 'checkbox', checked: s.get('Reactions'), click: () => a.setReactions(!s.get('Reactions')) },
+          {
+            label: 'Doze after',
+            enabled: s.get('Reactions'),
+            submenu: IDLE_CHOICES.map((m) => radio(`${m} minutes away`, s.get('IdleMinutes') === m, () => a.setIdleMinutes(m))),
+          },
           { type: 'separator' },
-          { label: 'Show a test reminder', click: () => a.testReminder() },
+          { label: 'Do little things on his own', type: 'checkbox', checked: s.get('Antics'), click: () => a.setAntics(!s.get('Antics')) },
+          { label: 'Do something now', click: () => a.anticNow() },
+          { type: 'separator' },
+          { label: 'Sounds', type: 'checkbox', checked: s.get('Sounds'), click: () => a.toggleSetting('Sounds') },
         ],
       },
+      focusMenu,
+      remindersMenu,
       { type: 'separator' },
-      { label: startLabel(), type: 'checkbox', checked: true, enabled: false, note: 'In the desktop app' },
-      { label: 'Take him down (exit)', click: () => a.takeDown() },
+      {
+        label: 'Hide him',
+        submenu: [
+          { label: 'For 15 minutes', click: () => a.hide(15) },
+          { label: 'For 1 hour', click: () => a.hide(60) },
+          { label: 'Until you bring him back', accel: `${keys}H`, click: () => a.hide(0) },
+        ],
+      },
+      { label: 'Take him down', click: () => a.takeDown() },
+      { type: 'separator' },
+      hotkeyItem,
+      startItem,
     ];
   }
 
@@ -153,6 +254,13 @@ export class SpideyMenu {
       label.className = 'menu-label';
       label.textContent = item.label;
       li.append(mark, label);
+      if (item.accel) {
+        const accel = document.createElement('span');
+        accel.className = 'menu-accel';
+        accel.textContent = item.accel;
+        accel.setAttribute('aria-hidden', 'true');
+        li.append(accel);
+      }
       if (item.note) {
         const note = document.createElement('span');
         note.className = 'menu-note';

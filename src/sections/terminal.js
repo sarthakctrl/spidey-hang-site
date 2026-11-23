@@ -6,7 +6,7 @@ import { reminders } from '../../vendor/spidey/index.js';
 import { parseCommand, HELP } from '../lib/commands.js';
 import { SITE_HEROES } from '../overlay/settings-store.js';
 
-export function initTerminal({ settings, spidey, actions }) {
+export function initTerminal({ settings, spidey, brain, actions }) {
   const out = document.querySelector('[data-term-out]');
   const form = document.querySelector('[data-term-form]');
   const input = document.querySelector('[data-term-input]');
@@ -55,6 +55,23 @@ export function initTerminal({ settings, spidey, actions }) {
       case 'refused':
         print(cmd.reason, 't-err');
         return;
+      case 'up':
+      case 'show':
+        actions.show();
+        print(cmd.type === 'up' ? 'ok, hanging again' : 'ok, shown');
+        return;
+      case 'focus':
+        runFocus(cmd);
+        return;
+      case 'once': {
+        const item = brain.addOnce(cmd.words);
+        if (item) {
+          print(`One-off reminder at ${item.at.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}: ${item.text} (kept until this page closes)`);
+        } else {
+          print(`One-off reminder refused, time not understood: ${cmd.words}`, 't-err');
+        }
+        return;
+      }
       default:
         break;
     }
@@ -106,14 +123,55 @@ export function initTerminal({ settings, spidey, actions }) {
       case 'stats':
         print(spidey.statsLine());
         break;
+      case 'web':
+        actions.webSwing(cmd.where === 'across' ? undefined : cmd.where);
+        print(`ok, web-swing ${cmd.where === 'across' ? 'across' : `to ${cmd.where}`}`);
+        break;
+      case 'dismiss':
+        spidey.bubble.hide();
+        print('ok, dismissed');
+        break;
+      case 'hide':
+        actions.hide(cmd.minutes);
+        print(cmd.minutes > 0 ? `Hidden for ${cmd.minutes} min ("show" brings him back)` : 'Hidden until "show"');
+        break;
+      case 'antic': {
+        const did = actions.anticNow(cmd.kind);
+        print(did ? `Antic: ${did}` : 'Antic skipped: busy', did ? '' : 't-dim');
+        break;
+      }
+      case 'sleep':
+        actions.doze();
+        print('Dozing off');
+        break;
+      case 'wake':
+        actions.wakeUp();
+        print('Woke up');
+        break;
+      case 'greet':
+        actions.greet();
+        print('Greeting shown');
+        break;
+      case 'down':
       case 'exit':
         actions.takeDown();
-        print('Exit');
+        print(cmd.type === 'down' ? 'Taken down ("up" hangs him again)' : 'Exit');
         break;
       default:
         break;
     }
   };
+
+  function runFocus(cmd) {
+    if (cmd.action === 'start') {
+      actions.startFocus(cmd.minutes);
+    } else if (cmd.action === 'stop') {
+      actions.stopFocus();
+    } else if (cmd.action === 'skip') {
+      actions.skipFocus();
+    }
+    print(`Focus status: ${brain.focus.describe(Date.now())}`);
+  }
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();

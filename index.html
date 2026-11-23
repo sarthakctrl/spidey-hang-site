@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Spidey Hang · hang in there</title>
-  <meta name="description" content="Spider-Man hangs upside down from a web at the top of your screen. Drag him and he swings. A free desktop toy for Windows and macOS.">
+  <meta name="description" content="Spider-Man hangs from a web at the top of your screen. Drag him and he swings, double-click and he web-swings across. A free desktop toy for Windows, macOS and Linux.">
   <meta name="theme-color" content="#c8202a">
   <meta property="og:title" content="Spidey Hang">
   <meta property="og:description" content="Spider-Man hangs from a web at the top of your screen. Drag him and he swings.">
@@ -23,13 +23,15 @@
     </a>
     <nav class="topnav" aria-label="Sections">
       <a href="#play">Play</a>
+      <a href="#tricks">New tricks</a>
+      <a href="#focus">Focus</a>
       <a href="#features">Features</a>
       <a href="#reminders">Reminders</a>
-      <a href="#hood">Under the hood</a>
       <a href="#commands">Commands</a>
     </nav>
     <div class="topbar-tools">
       <button class="hang-up" type="button" hidden>Hang him back up</button>
+      <span class="focus-countdown" data-focus-countdown hidden aria-live="off" title="Focus timer: time left"></span>
       <button class="tray" type="button" aria-haspopup="menu" title="Spidey's menu (the app's tray icon)">
         <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#web-icon"/></svg>
         <span class="visually-hidden">Open Spidey's menu</span>
@@ -48,8 +50,9 @@
       <div class="hero-copy">
         <p class="kicker">A tiny desktop toy for Windows, macOS and Linux</p>
         <h1 id="hero-title" class="shout">Hang in<br>there.</h1>
-        <p class="lede">Spider-Man hangs from a web at the top of your screen. Drag him and he swings.
-          The one hanging off this page runs the app's own physics, so go on: <strong>grab him.</strong></p>
+        <p class="lede">Spider-Man hangs from a web at the top of your screen. Drag him and he swings. Double-click him and he
+          web-swings across, web to web. He dozes when you're away, greets you when you're back, and keeps you to a focus timer.
+          The one hanging off this page runs the app's own code, so go on: <strong>grab him.</strong></p>
         <div class="cta">
           <a class="btn btn-gold btn-big" data-download-primary href="download/"><span data-os-label>Download Spidey Hang</span></a>
           <a class="btn btn-paper btn-big" href="#play">Play with him first</a>
@@ -59,15 +62,15 @@
           <a class="btn btn-paper" data-os-button="win" href="download/#install-windows"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#os-win"/></svg>Windows</a>
           <a class="btn btn-paper" data-os-button="linux" href="download/#install-linux"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><use href="#os-linux"/></svg>Linux</a>
         </div>
-        <p class="fineprint">Free and open source (MIT) · Windows, macOS and Linux · <span data-version>version 1.0.0</span></p>
+        <p class="fineprint">Free and open source (MIT) · Windows, macOS and Linux · <span data-version>version 1.1.0</span></p>
       </div>
       <div class="hero-art" aria-hidden="true">
         <span class="sfx sfx-boing">BOING!</span>
         <span class="sfx sfx-swish">SWISH</span>
         <div class="hero-panel">
           <p>Clicks go straight through him.</p>
-          <p>He sleeps when he stops.</p>
-          <p>He never steals your keyboard.</p>
+          <p>Double-click: THWIP, across the screen.</p>
+          <p>Idle at 0% CPU. Really.</p>
         </div>
       </div>
     </section>
@@ -83,15 +86,17 @@
 
       <ol class="moves">
         <li><b>Drag</b> him by the body or the rope. Let go to <b>fling</b> him.</li>
-        <li><b>Click</b> him for a nudge.</li>
+        <li><b>Click</b> him for a nudge. <b>Double-click</b> him and he <b>web-swings</b> across the page.</li>
         <li><b>Brush</b> the cursor across him to push him.</li>
         <li>Drag the little <b>web knot</b> at the top to move where he hangs.</li>
         <li><b>Right-click</b> him (long-press on a phone) for his menu.</li>
+        <li><b>Ctrl+Alt+Shift</b> (⌃⌥⇧ on a Mac) with <b>S</b> swings him, <b>W</b> sends him to the pointer, <b>F</b> starts a focus, <b>H</b> hides him.</li>
       </ol>
 
       <div class="panel controls" role="group" aria-label="Spidey's menu, laid out flat">
         <div class="control-row">
           <button class="btn btn-red" type="button" data-act="swing">Give him a swing</button>
+          <button class="btn btn-paper" type="button" data-web="across">Web-swing across</button>
           <button class="btn btn-paper" type="button" data-act="reset">Reset</button>
           <button class="btn btn-paper" type="button" data-act="menu" aria-haspopup="menu">Open the menu…</button>
         </div>
@@ -123,7 +128,117 @@
       </div>
     </section>
 
-    <!-- 3. Features -------------------------------------------------------------------------->
+    <!-- 3. New tricks: web-swinging and personality ----------------------------------------->
+    <section id="tricks" class="section tricks" aria-labelledby="tricks-title">
+      <header class="section-head">
+        <p class="kicker">New in 1.1</p>
+        <h2 id="tricks-title" class="shout shout-md">Thwip. Swing. Snooze.</h2>
+        <p>Version 1.1 taught him to get around on his own webs and gave him a personality. Everything here works on the Spidey
+          hanging off this page.</p>
+      </header>
+
+      <div class="split">
+        <div class="panel trick">
+          <h3>Web-swing anywhere</h3>
+          <p><b>Double-click him</b> and he swings from one side of the screen to the other, web to web, like Spider-Man between
+            buildings. He leans back, swings through, lets go on the way up and flies; on the way down a new web shoots from his
+            hand and catches him without losing speed. He turns to face the way he is going, and on every other long flight he
+            tucks into a <b>somersault</b>.</p>
+          <div class="mini-row" role="group" aria-label="Web-swing to">
+            <button class="btn btn-red btn-small" type="button" data-web="left">Left</button>
+            <button class="btn btn-red btn-small" type="button" data-web="center">Center</button>
+            <button class="btn btn-red btn-small" type="button" data-web="right">Right</button>
+            <button class="btn btn-paper btn-small" type="button" data-web="random">Somewhere else</button>
+            <button class="btn btn-paper btn-small" type="button" data-web="across">Across</button>
+          </div>
+          <ul class="ticks">
+            <li><b>Web-swing to</b> in his menu: Left, Center, Right, Somewhere else, Where the pointer is, or Across the screen.</li>
+            <li><b>Grab him</b> mid-swing to stop: he hangs from the web he has, and that spot is remembered.</li>
+            <li>With <b>Reduce motion</b> on in your system settings, he glides across calmly instead.</li>
+          </ul>
+        </div>
+
+        <div class="panel trick">
+          <h3>He reacts to the computer</h3>
+          <p>Leave the computer for 5 minutes (or lock it, or let it sleep) and he <b>dozes</b>: a few z's float up and stay, and
+            breeze and swinging on his own pause. Come back and he stretches and <b>greets</b> you: "Good morning!" the first time
+            each day, then "Welcome back!". On battery, he <b>warns</b> you once below 20% and once below 10%, and thanks you
+            when you plug in.</p>
+          <div class="mini-row" role="group" aria-label="Act it out">
+            <button class="btn btn-paper btn-small" type="button" data-react="doze">Doze off</button>
+            <button class="btn btn-paper btn-small" type="button" data-react="wake">Come back</button>
+            <button class="btn btn-paper btn-small" type="button" data-react="battery20">Battery 19%</button>
+            <button class="btn btn-paper btn-small" type="button" data-react="battery10">Battery 9%</button>
+          </div>
+          <p class="note">This page does it for real too: leave it alone for 5 minutes and he nods off.</p>
+          <label class="switch"><input type="checkbox" data-setting="Reactions"> <span>React to the computer (doze, greet, battery)</span></label>
+        </div>
+
+        <div class="panel trick">
+          <h3>Little things on his own</h3>
+          <p>Every 3 to 7 minutes at rest he does something: <b>wiggles</b>, <b>bungees</b> (drops on a longer web and climbs
+            back), <b>swings big</b>, <b>hops</b> a little way on a new web, or <b>says something</b> ("Just hanging around.").
+            Never while he dozes or during a focus.</p>
+          <div class="mini-row" role="group" aria-label="Do something now">
+            <button class="btn btn-gold btn-small" type="button" data-antic="">Do something now</button>
+            <button class="btn btn-paper btn-small" type="button" data-antic="wiggle">Wiggle</button>
+            <button class="btn btn-paper btn-small" type="button" data-antic="bungee">Bungee</button>
+            <button class="btn btn-paper btn-small" type="button" data-antic="swing">Big swing</button>
+            <button class="btn btn-paper btn-small" type="button" data-antic="web">Web-hop</button>
+            <button class="btn btn-paper btn-small" type="button" data-antic="say">Say something</button>
+          </div>
+          <div class="switches">
+            <label class="switch"><input type="checkbox" data-setting="Antics"> <span>Do little things on his own</span></label>
+            <label class="switch"><input type="checkbox" data-setting="Sounds"> <span>Sounds: a thwip and a whoosh</span></label>
+          </div>
+        </div>
+
+        <div class="panel trick">
+          <h3>Out of the way when you need it</h3>
+          <ul class="ticks">
+            <li><b>Hide him</b> for 15 minutes, an hour, or until you bring him back. Reminders still come, as system notifications.</li>
+            <li><b>Hide over full-screen apps</b> (macOS, on by default): no Spidey over your movie or slides.</li>
+            <li><b>Screen:</b> the main screen, any other one, or <b>Follow the pointer</b> to whichever screen you are working on.</li>
+            <li><b>Keyboard shortcuts</b> anywhere: Ctrl+Alt+Shift (⌃⌥⇧) with H hide or show, S swing, W web-swing to the pointer,
+              F start or stop a focus.</li>
+          </ul>
+          <div class="mini-row">
+            <button class="btn btn-paper btn-small" type="button" data-hide="1">Hide him for a minute</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Focus timer ---------------------------------------------------------------------->
+    <section id="focus" class="section focus" aria-labelledby="focus-title">
+      <header class="section-head">
+        <p class="kicker">Focus timer</p>
+        <h2 id="focus-title" class="shout shout-md">Heads down. He keeps watch.</h2>
+      </header>
+      <div class="split">
+        <div class="panel panel-dark focus-panel">
+          <p class="focus-big" data-focus-big aria-live="off">25m</p>
+          <p class="focus-state" data-focus-state aria-live="polite">Not running</p>
+          <div class="control-row">
+            <span data-focus-idle><button class="btn btn-gold" type="button" data-focus="start" data-focus-start-label>Start a 25 minute focus</button></span>
+            <span data-focus-idle><button class="btn btn-paper" type="button" data-focus="demo">Try a 1 minute one</button></span>
+            <span data-focus-running hidden><button class="btn btn-gold" type="button" data-focus="stop">Stop</button></span>
+            <span data-focus-running hidden><button class="btn btn-paper" type="button" data-focus="skip">Skip ahead</button></span>
+          </div>
+          <p class="note">The countdown also shows in this page's top bar, where the app puts it next to the menu bar icon.</p>
+        </div>
+        <ul class="rules">
+          <li><b>25 minutes of focus, then a 5 minute break.</b> Every 4th break is a 15 minute one. Then focus again, until you
+            stop it. All three lengths are in <b>Focus timer</b> in his menu.</li>
+          <li><b>He tells you.</b> When a focus ends he swings big and says "Take a break"; when a break ends, "Back to it!".</li>
+          <li><b>Next to the menu bar icon</b> on macOS (the tray tooltip elsewhere), updated once a minute and every second in the last.</li>
+          <li><b>Works from the clock,</b> so a computer that slept comes back to the right part. No antics during a focus.</li>
+          <li><b>Ctrl+Alt+Shift+F</b> (⌃⌥⇧F) starts or stops one from anywhere.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 5. Features -------------------------------------------------------------------------->
     <section id="features" class="section features" aria-labelledby="features-title">
       <header class="section-head">
         <p class="kicker">Everything he does</p>
@@ -144,7 +259,8 @@
         </article>
         <article class="feature f-blue">
           <h3>Move the web</h3>
-          <p>Drag the knot along the top of the screen and he swings along behind it. Or pick Left, Center or Right from his menu.</p>
+          <p>Drag the knot along the top of the screen and he swings along behind it. Or pick Left, Center or Right from his menu,
+            or let him <b>web-swing</b> there himself.</p>
           <div class="mini-row">
             <button class="btn btn-paper btn-small" type="button" data-pos="0.12">Left</button>
             <button class="btn btn-paper btn-small" type="button" data-pos="0.5">Center</button>
@@ -171,19 +287,21 @@
         <article class="feature">
           <h3>Sleeps when still</h3>
           <p>When he stops moving the app stops drawing, and uses no CPU until you touch him again. While he swings it draws at most 60
-            frames a second, and 30 when he only sways on his own.</p>
+            frames a second, and 30 when he only sways on his own. Even the dozing z's float up once and then hold still.</p>
           <p class="live" aria-live="polite">Right now: <b data-live="drawing">asleep</b></p>
         </article>
         <article class="feature">
           <h3>Reminders in a speech bubble</h3>
-          <p>"Time to drink some water" on every half hour, and "It's your lunch time" at 3:00 PM. The bubble pops up just above his
-            face, types itself out, and follows him as he swings.</p>
+          <p>"Time to drink some water" every 30 minutes (or every 15 minutes to 2 hours), and "It's your lunch time" at the time you
+            pick. Write your own, or set a one-off: "remind in 10 Tea is ready". The bubble pops up above his face, types itself out,
+            and follows him as he swings.</p>
           <a class="text-link" href="#reminders">See the reminders</a>
         </article>
         <article class="feature">
           <h3>Heroes and poses</h3>
           <p>Seven heroes: six pictures and one drawn in code. Pick one from the menu, or have them change every few minutes. Picture heroes switch between a hanging pose and a
-            swinging pose as he speeds up and slows down. The one hanging here is Iron Spider.</p>
+            swinging pose as he speeds up and slows down, and turn to face the way they web-swing. <b>Add your own</b> from any
+            picture in the app. The one hanging here is Iron Spider.</p>
           <a class="text-link" href="#heroes">How heroes work</a>
         </article>
         <article class="feature f-blue">
@@ -194,8 +312,9 @@
         </article>
         <article class="feature">
           <h3>A command line</h3>
-          <p>Scripts can talk to a running Spidey: <code>push</code>, <code>reset</code>, <code>swing on</code>, <code>remind</code>,
-            <code>snapshot</code> and more, over a private pipe only your account can open.</p>
+          <p>Scripts can talk to a running Spidey: <code>push</code>, <code>web left</code>, <code>focus start</code>,
+            <code>remind in 10 …</code>, <code>antic bungee</code>, <code>hide</code> and more, over a private pipe only your account
+            can open. <code>npm run spidey -- remind "Build passed"</code> makes him say it.</p>
           <a class="text-link" href="#commands">Try the commands</a>
         </article>
         <article class="feature">
@@ -219,17 +338,30 @@
           <dd>Opening the app again while he is up gives him a swing instead of a second Spidey.</dd>
           <dt>Moves himself to Applications</dt>
           <dd>On a Mac, opened from the disk image or Downloads, he offers to move to Applications so starting at login keeps working.</dd>
+          <dt>Keyboard shortcuts anywhere</dt>
+          <dd>Ctrl+Alt+Shift (⌃⌥⇧) with H, S, W or F work in every app. Here they only work while this page has focus.</dd>
+          <dt>Dozes when you lock the computer</dt>
+          <dd>He watches the keyboard and mouse across the whole computer, the lock screen and sleep. Here: this page's own mouse and keys.</dd>
+          <dt>More than one screen</dt>
+          <dd>Pick a screen from his menu, or have him follow the pointer to whichever screen you are on.</dd>
+          <dt>Hide over full-screen apps</dt>
+          <dd>On a Mac he steps aside for any app in full screen, and hidden reminders arrive as system notifications.</dd>
+          <dt>Your own heroes</dt>
+          <dd><b>Hero › Add a hero from a picture…</b> copies one into <code>~/.spidey-hang/heroes</code>. Yours show "(yours)" in the menu.</dd>
+          <dt>Your own reminders</dt>
+          <dd><b>Reminders › Edit your reminders…</b> opens a small window for your own: at a time each day or every so many minutes, on the days you pick.</dd>
           <dt>A log file</dt>
           <dd>Every start, layout and problem goes to <code>~/.spidey-hang/log.txt</code>. Check it first if he misbehaves.</dd>
         </dl>
       </aside>
     </section>
 
-    <!-- 4. Reminders ------------------------------------------------------------------------->
+    <!-- 6. Reminders ------------------------------------------------------------------------->
     <section id="reminders" class="section reminders" aria-labelledby="reminders-title">
       <header class="section-head">
         <p class="kicker">Reminders</p>
         <h2 id="reminders-title" class="shout shout-md">Drink water. Eat lunch.</h2>
+        <p>Both are on by default, and both times are yours to pick, as in <b>Reminders</b> in his menu.</p>
       </header>
       <div class="split">
         <div class="panel clock-panel">
@@ -240,13 +372,20 @@
             <button class="btn btn-paper" type="button" data-remind="lunch">Lunch one</button>
           </div>
           <div class="switches">
-            <label class="switch"><input type="checkbox" data-reminder="WaterReminder"> <span>Drink water every 30 minutes</span></label>
-            <label class="switch"><input type="checkbox" data-reminder="LunchReminder"> <span>Lunch at 3:00 PM</span></label>
+            <label class="switch"><input type="checkbox" data-reminder="WaterReminder"> <span>Drink water every <span data-water-every>30 minutes</span></span></label>
+            <label class="switch"><input type="checkbox" data-reminder="LunchReminder"> <span>Lunch at <span data-lunch-at>3:00 PM</span></span></label>
           </div>
-          <p class="note">These are real: leave this page open on the half hour and he will remind you.</p>
+          <div class="picks">
+            <label>Water every <select data-reminder-time="WaterMinutes"></select></label>
+            <label>Lunch time <select data-reminder-time="LunchTime"></select></label>
+          </div>
+          <p class="note">These are real: leave this page open and he will remind you. Try <code>remind in 1 Stretch!</code> in the terminal below for a one-off.</p>
         </div>
         <ul class="rules">
-          <li><b>On the clock, not on a timer.</b> Water comes at :00 and :30 of every hour. Lunch comes at 3:00 PM, and at 3:00 only lunch shows.</li>
+          <li><b>On the clock, not on a timer.</b> Water every 30 minutes means :00 and :30 of every hour; every 2 hours means on the even
+            hours. Lunch comes at the time you pick (3:00 PM unless you change it), and then only lunch shows.</li>
+          <li><b>One-off reminders</b> from the command line: <code>remind in 10 Tea is ready</code> or <code>remind at 15:30 Call back</code>.
+            They are listed in the Reminders menu until they come.</li>
           <li><b>No stale nagging.</b> If the computer was asleep and a reminder is more than two minutes late, it is skipped.</li>
           <li><b>Typed, like a message.</b> The bubble pops in, shows typing dots, types out letter by letter, then stays about 9 seconds. Click it to close it.</li>
           <li><b>Always above his face,</b> in every pose, on the side of the web with more room.</li>
@@ -254,13 +393,14 @@
       </div>
     </section>
 
-    <!-- 5. Heroes ---------------------------------------------------------------------------->
+    <!-- 7. Heroes ---------------------------------------------------------------------------->
     <section id="heroes" class="section heroes" aria-labelledby="heroes-title">
       <header class="section-head">
         <p class="kicker">Heroes</p>
         <h2 id="heroes-title" class="shout shout-md">Pick your Spidey.</h2>
         <p>Every hero from the app. Tap one and he takes over the web at the top of this page, the same as
-          <b>Hero</b> in his menu. <b>Hero › Change hero every</b> rotates through them every 2, 5, 10 or 30 minutes.</p>
+          <b>Hero</b> in his menu. <b>Hero › Change hero every</b> rotates through them every 2, 5, 10 or 30 minutes. In the app,
+          <b>Hero › Add a hero from a picture…</b> makes any picture a hero of your own.</p>
       </header>
       <ul class="hero-gallery" aria-label="Heroes">
         <li><button class="hero-card" type="button" data-hero="Iron Spider - Web Swing" aria-pressed="false">
@@ -301,7 +441,7 @@
       </ul>
     </section>
 
-    <!-- 6. Under the hood -------------------------------------------------------------------->
+    <!-- 8. Under the hood -------------------------------------------------------------------->
     <section id="hood" class="section hood" aria-labelledby="hood-title">
       <header class="section-head">
         <p class="kicker">Under the hood</p>
@@ -332,7 +472,7 @@
       </div>
     </section>
 
-    <!-- 7. Commands -------------------------------------------------------------------------->
+    <!-- 9. Commands -------------------------------------------------------------------------->
     <section id="commands" class="section commands" aria-labelledby="commands-title">
       <header class="section-head">
         <p class="kicker">For scripts</p>
@@ -349,6 +489,13 @@
           </form>
           <div class="chips" aria-label="Example commands">
             <button type="button" data-cmd="push 2">push 2</button>
+            <button type="button" data-cmd="web pointer">web pointer</button>
+            <button type="button" data-cmd="travel">travel</button>
+            <button type="button" data-cmd="antic bungee">antic bungee</button>
+            <button type="button" data-cmd="focus start 1">focus start 1</button>
+            <button type="button" data-cmd="remind in 1 Stretch!">remind in 1 Stretch!</button>
+            <button type="button" data-cmd="sleep">sleep</button>
+            <button type="button" data-cmd="greet">greet</button>
             <button type="button" data-cmd="swing toggle">swing toggle</button>
             <button type="button" data-cmd="remind Hang in there!">remind Hang in there!</button>
             <button type="button" data-cmd="snapshot spidey.png">snapshot spidey.png</button>
@@ -361,15 +508,17 @@
           <h3>Where the real commands go</h3>
           <dl class="keys">
             <dt>Windows</dt><dd>The named pipe <code>\\.\pipe\SpideyHang</code></dd>
-            <dt>macOS</dt><dd>The socket <code>~/.spidey-hang/spidey.sock</code>, which only your account can open</dd>
+            <dt>macOS, Linux</dt><dd>The socket <code>~/.spidey-hang/spidey.sock</code>, which only your account can open</dd>
           </dl>
-          <p>The app itself also takes <code>--push [n]</code>, <code>--reset</code> and <code>--exit</code> on its command line.</p>
+          <p>From a checkout of the app, <code>npm run spidey -- &lt;command&gt;</code> sends one, so a script or git hook can make him
+            talk: <code>npm run spidey -- remind "Build passed"</code>. It exits with 1 if Spidey is not running.</p>
+          <p>The app itself also takes <code>--push [n]</code>, <code>--reset</code>, <code>--exit</code> and <code>--reminders</code> on its command line.</p>
           <p><code>snapshot</code> saves only what Spidey himself draws, never the screen behind him.</p>
         </div>
       </div>
     </section>
 
-    <!-- 8. Download -------------------------------------------------------------------------->
+    <!-- 10. Download -------------------------------------------------------------------------->
     <section id="download" class="section download" aria-labelledby="download-title">
       <header class="section-head">
         <p class="kicker">Get him</p>

@@ -1,4 +1,4 @@
-// Copied from Spidey Hang 1.0.0, src/renderer/bubble.js, by scripts/sync-app-code.mjs. Do not edit here.
+// Copied from Spidey Hang 1.1.0, src/renderer/bubble.js, by scripts/sync-app-code.mjs. Do not edit here.
 // MIT licensed, see LICENSE in this folder.
 const module = undefined;
 const require = undefined;
@@ -30,6 +30,8 @@ const require = undefined;
       this.side = 'left';
       /** Its height, measured when the text changes, so placing it each frame never forces a layout. */
       this.height = 0;
+      /** Called once it has faded away. */
+      this.onHidden = null;
     }
 
     measure() {
@@ -85,6 +87,9 @@ const require = undefined;
       this.later(() => {
         this.visible = false;
         this.el.hidden = true;
+        if (this.onHidden) {
+          this.onHidden();
+        }
       }, FADE_MS);
     }
 
@@ -97,14 +102,6 @@ const require = undefined;
       }
       const shift = side === 'left' ? '-100%' : '0px';
       this.el.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px) translate(${shift}, -100%)`;
-    }
-
-    contains(pt) {
-      if (!this.visible) {
-        return false;
-      }
-      const r = this.el.getBoundingClientRect();
-      return pt.x >= r.left && pt.x <= r.right && pt.y >= r.top && pt.y <= r.bottom;
     }
   }
 

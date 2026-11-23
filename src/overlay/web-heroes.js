@@ -5,7 +5,8 @@
  * as its hero.json "file" entries do.
  *
  * Points are in the picture's own pixels: grip (where the web ties on), face (where reminder bubbles
- * point, with faceSize its radius), tilt (degrees, clockwise).
+ * point, with faceSize its radius), hand (where new webs shoot from), tilt (degrees, clockwise), faces
+ * (which way the picture looks: -1 left, 1 right).
  */
 import { IMAGES, STAGE } from '../../vendor/spidey/index.js';
 import animatedUrl from '../assets/heroes/animated-spidey-web-swing.webp';
@@ -15,19 +16,22 @@ import iconicSwingUrl from '../assets/heroes/iconic-spidey-web-swing.webp';
 import ironSpiderUrl from '../assets/heroes/iron-spider-web-swing.webp';
 
 const point = (x, y) => ({ x, y });
+/** hero.json "faces": which way the picture looks, so he can be turned to face the way he web-swings. */
+const LEFT = -1;
+const RIGHT = 1;
 
-const UPSIDE_DOWN = { url: upsideDownUrl, faceSize: 62, face: point(255, 662) };
-const ICONIC_SWING = { url: iconicSwingUrl, tilt: -7, faceSize: 75, grip: point(330, 518), face: point(290, 185) };
+const UPSIDE_DOWN = { url: upsideDownUrl, faceSize: 62, face: point(255, 662), hand: point(322, 85) };
+const ICONIC_SWING = { url: iconicSwingUrl, faces: LEFT, tilt: -7, faceSize: 75, grip: point(330, 518), face: point(290, 185), hand: point(222, 35) };
 
 /** name -> { about, poses: { hang, swing? } }, in the app's menu order (alphabetical). */
 export const HEROES = {
   'Animated Spidey - Web Swing': {
     about: 'Animated style, hanging from one fist, the other hand out in a thwip',
-    poses: { hang: { url: animatedUrl, tilt: -20, faceSize: 36, grip: point(366, 22), face: point(182, 145) } },
+    poses: { hang: { url: animatedUrl, faces: LEFT, tilt: -20, faceSize: 36, grip: point(366, 22), face: point(182, 145), hand: point(68, 212) } },
   },
   'Comic Spidey - Web Swing': {
     about: 'Classic comic style, both fists on his web',
-    poses: { hang: { url: comicUrl, tilt: -12, faceSize: 40, grip: point(408, 34), face: point(333, 214) } },
+    poses: { hang: { url: comicUrl, faces: LEFT, tilt: -12, faceSize: 40, grip: point(408, 34), face: point(333, 214), hand: point(381, 119) } },
   },
   'Iconic Spidey - Both': {
     about: 'Upside down at rest, the swing pose while he moves',
@@ -43,7 +47,7 @@ export const HEROES = {
   },
   'Iron Spider - Web Swing': {
     about: 'The Iron Spider suit, hanging from his raised fist',
-    poses: { hang: { url: ironSpiderUrl, tilt: 4, faceSize: 45, grip: point(262, 32), face: point(452, 253) } },
+    poses: { hang: { url: ironSpiderUrl, faces: RIGHT, tilt: 4, faceSize: 45, grip: point(262, 32), face: point(452, 253), hand: point(462, 563) } },
   },
 };
 

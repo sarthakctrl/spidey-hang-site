@@ -1,4 +1,4 @@
-// Copied from Spidey Hang 1.0.0, src/renderer/shared/vec.js, by scripts/sync-app-code.mjs. Do not edit here.
+// Copied from Spidey Hang 1.1.0, src/renderer/shared/vec.js, by scripts/sync-app-code.mjs. Do not edit here.
 // MIT licensed, see LICENSE in this folder.
 const module = undefined;
 const require = undefined;

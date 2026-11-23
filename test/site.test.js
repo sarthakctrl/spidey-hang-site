@@ -25,6 +25,28 @@ test('commands parse the way the app parses them', () => {
   assert.equal(parseCommand('').type, 'empty');
 });
 
+test('the app\'s newer commands parse too', () => {
+  assert.deepEqual(parseCommand('web left'), { type: 'web', where: 'left' });
+  assert.deepEqual(parseCommand('web 0.4'), { type: 'web', where: 0.4 });
+  assert.equal(parseCommand('web 7').type, 'ignored');
+  assert.equal(parseCommand('web').type, 'ignored');
+  assert.deepEqual(parseCommand('travel'), { type: 'web', where: 'across' });
+  assert.deepEqual(parseCommand('remind in 10 Tea is ready'), { type: 'once', words: 'in 10 Tea is ready' });
+  assert.deepEqual(parseCommand('remind at 15:30 Call back'), { type: 'once', words: 'at 15:30 Call back' });
+  assert.deepEqual(parseCommand('remind inside joke'), { type: 'remind', kind: 'note', text: 'inside joke' });
+  assert.deepEqual(parseCommand('focus start 50'), { type: 'focus', action: 'start', minutes: 50 });
+  assert.deepEqual(parseCommand('focus start'), { type: 'focus', action: 'start', minutes: undefined });
+  assert.deepEqual(parseCommand('focus'), { type: 'focus', action: 'status' });
+  assert.equal(parseCommand('focus later').type, 'ignored');
+  assert.deepEqual(parseCommand('hide 15'), { type: 'hide', minutes: 15 });
+  assert.deepEqual(parseCommand('hide'), { type: 'hide', minutes: 0 });
+  assert.deepEqual(parseCommand('antic bungee'), { type: 'antic', kind: 'bungee' });
+  assert.deepEqual(parseCommand('antic dance'), { type: 'antic', kind: null });
+  for (const word of ['show', 'sleep', 'wake', 'greet', 'dismiss', 'down', 'up']) {
+    assert.deepEqual(parseCommand(word), { type: word });
+  }
+});
+
 test('platform detection picks the right installer', () => {
   const mac = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36';
   assert.deepEqual(detectFromStrings({ userAgent: mac, architecture: 'arm' }), { os: 'mac', pick: 'mac-arm' });
@@ -81,6 +103,19 @@ test('settings keep the app keys and defaults and refuse bad values', () => {
   assert.equal(SITE_HEROES.length, 7);
   assert.equal(SITE_HEROES.at(-1), DRAWN, 'the drawing comes last, as in the app');
   assert.equal(clean({ Hero: 'Comic Spidey - Web Swing' }).Hero, 'Comic Spidey - Web Swing');
+  // The app's newer settings: water interval, lunch time, focus lengths, personality.
+  assert.equal(DEFAULTS.WaterMinutes, 30);
+  assert.equal(DEFAULTS.LunchTime, '15:00');
+  assert.equal(DEFAULTS.Reactions, true);
+  assert.equal(DEFAULTS.Antics, true);
+  assert.equal(DEFAULTS.Sounds, false);
+  assert.equal(clean({ WaterMinutes: 45 }).WaterMinutes, 45);
+  assert.equal(clean({ WaterMinutes: 7 }).WaterMinutes, 30);
+  assert.equal(clean({ LunchTime: '12:30' }).LunchTime, '12:30');
+  assert.equal(clean({ LunchTime: '25:00' }).LunchTime, '15:00');
+  assert.equal(clean({ FocusMinutes: 50 }).FocusMinutes, 50);
+  assert.equal(clean({ FocusMinutes: 1000 }).FocusMinutes, 25);
+  assert.equal(clean({ IdleMinutes: 3 }).IdleMinutes, 5);
 
   const memory = new Map();
   const storage = { getItem: (k) => memory.get(k) ?? null, setItem: (k, v) => memory.set(k, v) };

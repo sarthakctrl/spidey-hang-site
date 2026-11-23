@@ -7,7 +7,7 @@
  *
  * The app's files are UMD scripts. Each copy gets two lines on top that make it an ES module and keep
  * it on its browser path (no `module`, no `require`), so bundlers never mistake it for CommonJS.
- * reminders.js is CommonJS only; its export line becomes an ES export.
+ * reminders.js, focus.js and reactions.js are CommonJS only; their export line becomes an ES export.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -19,11 +19,16 @@ const out = path.join(root, 'vendor', 'spidey');
 const UMD = [
   'renderer/shared/vec.js',
   'renderer/shared/rig.js',
+  'renderer/shared/travel.js',
   'renderer/shared/images.js',
   'renderer/shared/stage.js',
   'renderer/shared/figure.js',
   'renderer/bubble.js',
+  'renderer/sound.js',
 ];
+
+/** CommonJS files whose last line is a plain module.exports = { ... }: that line becomes an ES export. */
+const COMMONJS = ['lib/reminders.js', 'lib/focus.js', 'lib/reactions.js'];
 
 if (!fs.existsSync(path.join(app, 'src', 'renderer', 'shared', 'rig.js'))) {
   console.error(`No Spidey Hang app at ${app}. Pass its folder: npm run sync -- /path/to/Hang-in-there`);
@@ -46,13 +51,15 @@ for (const file of UMD) {
   fs.writeFileSync(path.join(out, path.basename(file)), wrapped);
 }
 
-const reminders = fs.readFileSync(path.join(app, 'src', 'lib', 'reminders.js'), 'utf8');
-if (!/^module\.exports = \{[^}]+\};$/m.test(reminders)) {
-  console.error('reminders.js no longer ends with a plain module.exports = { ... } line; update this script.');
-  process.exit(1);
+for (const file of COMMONJS) {
+  const source = fs.readFileSync(path.join(app, 'src', file), 'utf8');
+  if (!/^module\.exports = \{[^}]+\};$/m.test(source)) {
+    console.error(`${file} no longer ends with a plain module.exports = { ... } line; update this script.`);
+    process.exit(1);
+  }
+  fs.writeFileSync(path.join(out, path.basename(file)),
+    header(file) + source.replace(/^'use strict';\n/m, '').replace(/^module\.exports = (\{[^}]+\});$/m, 'export $1'));
 }
-fs.writeFileSync(path.join(out, 'reminders.js'),
-  header('lib/reminders.js') + reminders.replace(/^'use strict';\n/m, '').replace(/^module\.exports = (\{[^}]+\});$/m, 'export $1'));
 
 // The speech bubble's styles: the part of overlay.css after the page's own rules.
 const css = fs.readFileSync(path.join(app, 'src', 'renderer', 'overlay.css'), 'utf8');
