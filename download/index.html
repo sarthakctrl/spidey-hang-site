@@ -23,6 +23,7 @@
       <a href="#install-windows">Windows</a>
       <a href="#install-mac">macOS</a>
       <a href="#install-linux">Linux</a>
+      <a href="#warnings">Warnings</a>
       <a href="#trouble">Not starting?</a>
       <a href="#build">Build it</a>
     </nav>
@@ -56,7 +57,9 @@
         <article id="install-windows" class="panel install" data-install="windows">
           <h3>Windows</h3>
           <ol class="steps">
-            <li>Run the downloaded <b>Setup .exe</b>. It installs for you only and needs no admin rights.</li>
+            <li>Run the downloaded <b>Setup .exe</b>. It installs for you only and needs no admin rights. If Windows says
+              <b>“Windows protected your PC”</b>, click <b>More info</b>, then <b>Run anyway</b>
+              (<a class="text-link" href="#warnings">why?</a>).</li>
             <li>He starts straight away and hangs from the top of your screen.</li>
             <li>His menu: right-click him, or the spider-web icon by the clock. A left-click on that icon gives him a swing.</li>
           </ol>
@@ -66,8 +69,9 @@
           <h3>macOS</h3>
           <ol class="steps">
             <li>Open the <b>.dmg</b> and drag <b>Spidey Hang</b> into <b>Applications</b>.</li>
-            <li>Open him from Applications. The build is not notarized, so the first time, <b>right-click the app and choose Open</b>
-              (or allow it under System Settings › Privacy &amp; Security).</li>
+            <li>Open him from Applications. The first time, macOS says it <b>could not verify</b> him. Click <b>Done</b>, then go to
+              System Settings › Privacy &amp; Security and click <b>Open Anyway</b>
+              (<a class="text-link" href="#warnings">why, and step by step</a>).</li>
             <li>He has no Dock icon. Look for him at the top of the screen and for the spider-web icon in the menu bar.</li>
           </ol>
           <p class="note">Opened from anywhere else (the disk image, Downloads), he offers to move himself to Applications, so starting at
@@ -76,7 +80,8 @@
         <article id="install-linux" class="panel install" data-install="linux">
           <h3>Linux</h3>
           <ol class="steps">
-            <li>Double-click the <b>.deb</b> to install it from App Center, or in a terminal:
+            <li>Double-click the <b>.deb</b> to install it from App Center (if it calls the package unverified, choose
+              <b>Install anyway</b>; <a class="text-link" href="#warnings">why?</a>), or in a terminal:
               <pre class="code"><code>sudo apt install ./spidey-hang_*_amd64.deb</code></pre></li>
             <li>Start <b>Spidey Hang</b> from the app grid.</li>
             <li>His menu: right-click him, or the spider-web icon in Ubuntu's top bar.</li>
@@ -85,6 +90,39 @@
             Remove him with <code>sudo apt remove spidey-hang</code>.</p>
         </article>
       </div>
+    </section>
+
+    <section id="warnings" class="section" aria-labelledby="warnings-title">
+      <header class="section-head">
+        <h2 id="warnings-title" class="shout shout-md">Your computer warns you?</h2>
+        <p>That's expected. Windows, macOS and Ubuntu warn about any app whose maker hasn't bought a signing certificate
+          (Apple's costs $99 a year). Spidey Hang is a free fan project and isn't signed yet, so you'll see a warning once.
+          It doesn't mean anything was found in the app. All of his code is public, and the installers are built from it on
+          GitHub: <a class="text-link" data-repo-link="app" href="https://github.com/">read the code</a>.</p>
+      </header>
+      <dl class="faq panel">
+        <dt>macOS: “Apple could not verify Spidey Hang is free of malware…”</dt>
+        <dd>
+          <ol class="steps">
+            <li>Click <b>Done</b> (not Move to Trash).</li>
+            <li>Open <b>System Settings › Privacy &amp; Security</b> and scroll down to <b>Security</b>.</li>
+            <li>Next to “Spidey Hang was blocked…”, click <b>Open Anyway</b>, enter your password, then click <b>Open Anyway</b> again.</li>
+          </ol>
+          <p class="note">You only do this once. On macOS 14 and older, right-clicking the app and choosing <b>Open</b> also works.
+            Comfortable with Terminal? This does the same:</p>
+          <pre class="code"><code>xattr -dr com.apple.quarantine "/Applications/Spidey Hang.app"</code></pre>
+        </dd>
+        <dt>Windows: “Windows protected your PC”</dt>
+        <dd>That's SmartScreen. Click <b>More info</b>, check the app name says Spidey Hang, then click <b>Run anyway</b>.
+          If your browser says the file “isn't commonly downloaded”, open its downloads list and choose <b>Keep</b>.</dd>
+        <dt>Ubuntu: “unverified” or “potentially unsafe”</dt>
+        <dd>App Center says this about every .deb that doesn't come from Ubuntu's own store. Choose <b>Install anyway</b>, or install
+          it from a terminal instead:
+          <pre class="code"><code>sudo apt install ./spidey-hang_*_amd64.deb</code></pre></dd>
+        <dt>Is it safe?</dt>
+        <dd>Spidey never connects to the internet. He keeps his settings and log in <code>~/.spidey-hang</code>. If you'd rather not
+          trust a download at all, <a class="text-link" href="#build">build him yourself</a> from the code.</dd>
+      </dl>
     </section>
 
     <section id="trouble" class="section" aria-labelledby="trouble-title">
