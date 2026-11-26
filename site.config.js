@@ -3,7 +3,7 @@
  */
 export default {
   /** The app's repository. Its GitHub Releases hold the installers. */
-  appRepo: 'ashishmanhas231/Hang-in-there',
+  appRepo: 'sarthakctrl/spidey-hang',
   /** This site's repository, linked in the footer. */
   siteRepo: 'sarthakctrl/spidey-hang-site',
 };

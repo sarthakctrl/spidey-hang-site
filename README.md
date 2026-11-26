@@ -1,6 +1,6 @@
 # Spidey Hang website
 
-The website for [Spidey Hang](https://github.com/ashishmanhas231/Hang-in-there), the desktop toy where
+The website for [Spidey Hang](https://github.com/sarthakctrl/spidey-hang), the desktop toy where
 Spider-Man hangs from a web at the top of your screen. Visitors can play with him in the browser, read
 about every feature, and download the app for Windows, macOS or Linux.
 
