@@ -67,7 +67,7 @@ export class SpideyMenu {
     const radio = (label, checked, click) => ({ label, type: 'radio', checked, click });
     const relayout = (changes) => () => a.relayout(changes);
     const hero = s.get('Hero');
-    const keys = isMac() ? '⌃⌥⇧' : 'Ctrl+Alt+Shift+';
+    const keys = isMac() ? '⌃⇧' : 'Ctrl+Shift+';
     const now = Date.now();
     const focus = brain.focus;
     const lengths = (key, values) => values.map((m) => radio(`${m} minutes`, s.get(key) === m, () => a.setFocusLength(key, m)));
@@ -103,7 +103,7 @@ export class SpideyMenu {
       ],
     };
     const hotkeyItem = {
-      label: `Keyboard shortcuts (${keys}H hide, S swing, W web-swing, F focus)`,
+      label: `Keyboard shortcuts (${keys}H hide, B bring back, S swing, W web-swing, F focus)`,
       type: 'checkbox',
       checked: s.get('Hotkeys'),
       click: () => a.toggleSetting('Hotkeys'),
@@ -113,8 +113,8 @@ export class SpideyMenu {
     if (!spidey.shown) {
       return [
         spidey.up
-          ? { label: 'Show him', accel: `${keys}H`, click: () => a.show() }
-          : { label: 'Bring him back', click: () => a.show() },
+          ? { label: 'Show him', accel: `${keys}B`, click: () => a.show() }
+          : { label: 'Bring him back', accel: `${keys}B`, click: () => a.show() },
         { type: 'separator' },
         focusMenu,
         remindersMenu,

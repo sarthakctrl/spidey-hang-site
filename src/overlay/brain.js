@@ -8,7 +8,7 @@
  *   no keyboard or mouse for N minutes           no keyboard, mouse, touch or scrolling on this page
  *   screen locked, computer asleep               this tab hidden for N minutes or more
  *   countdown next to the menu bar icon          countdown next to the web icon in the top bar
- *   global shortcuts (Ctrl+Alt+Shift H/S/W/F)    the same keys while this page has focus
+ *   global shortcuts (Ctrl+Shift H/B/S/W/F)      the same keys while this page has focus
  *
  * Nothing here polls: each timer is set for when something is due, and moving the mouse only writes
  * down the time. Idle stays at 0% CPU, as in the app.
@@ -264,14 +264,18 @@ export class Brain {
 
   // ---- Keyboard shortcuts ---------------------------------------------------------------------
 
-  /** Control+Option+Shift (Ctrl+Alt+Shift) and H hide or show, S swing, W web-swing to the pointer, F focus. */
+  /**
+   * Control+Shift (Ctrl+Shift) and H hide or show, B bring back, S swing, W web-swing to the pointer, F focus.
+   * The browser keeps some for itself (Ctrl+Shift+W closes the window on Windows and Linux).
+   */
   watchKeys() {
     window.addEventListener('keydown', (e) => {
-      if (!this.settings.get('Hotkeys') || !e.ctrlKey || !e.altKey || !e.shiftKey || e.metaKey || e.repeat) {
+      if (!this.settings.get('Hotkeys') || !e.ctrlKey || !e.shiftKey || e.altKey || e.metaKey || e.repeat) {
         return;
       }
       const act = {
         KeyH: () => (this.spidey.hidden ? this.spidey.showAgain() : this.spidey.hide(0)),
+        KeyB: () => (this.spidey.up ? this.spidey.showAgain() : this.spidey.hangUp()),
         KeyS: () => this.spidey.push(1),
         KeyW: () => this.spidey.webSwing('pointer'),
         KeyF: () => this.toggleFocus(),
